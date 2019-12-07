@@ -36,15 +36,14 @@ export const Home = ({
         />
         <Box display="flex" justifyContent="center" m={1} p={1}>
           <Box p={1}>
-            {!!offset && (
-              <Button
-                onClick={() => fetchPokemons(next, true)}
-                variant="contained"
-                color="primary"
-              >
-                Previous
-              </Button>
-            )}
+            <Button
+              disabled={!offset}
+              onClick={() => fetchPokemons(next, true)}
+              variant="contained"
+              color="primary"
+            >
+              Previous
+            </Button>
           </Box>
           <Box p={1}>
             <Button
