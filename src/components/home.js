@@ -84,8 +84,13 @@ const CenteredDiv = styled.div`
   justify-content: center;
 `
 const StyledImage = styled.img`
-  width: 80%;
+  width: 70%;
   height: 200px;
+  transition: all 0.1s ease-out !important;
+  &:hover {
+    transform: scale(1.05);
+  }
+  cursor: pointer;
 `
 
 Home.propTypes = {

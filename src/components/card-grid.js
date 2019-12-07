@@ -17,9 +17,8 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
           xs={12}
           md={3}
           key={name}
-          onClick={() => handlePokemonClick(url)}
         >
-          <StyledCard>
+          <StyledCard onClick={() => handlePokemonClick(url)}>
             <StyledCardContent>
               <Box display="flex" justifyContent="center">
                 <Typography>

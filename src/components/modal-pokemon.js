@@ -8,11 +8,6 @@ import ListItem from '@material-ui/core/ListItem'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 
-const BigAvatar = styled.img`
-  width: 200px;
-  height: 200px;
-`
-
 export const ModalPokemon = ({ currentPokemon, handleClose }) => {
   if (!currentPokemon) return null
   const { order, name, sprites, status, height, base_experience: baseExperience } = currentPokemon
@@ -48,6 +43,12 @@ export const ModalPokemon = ({ currentPokemon, handleClose }) => {
     </Dialog>
   )
 }
+
+const BigAvatar = styled.img`
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+`
 
 ModalPokemon.propTypes = {
   currentPokemon: PropTypes.object,
