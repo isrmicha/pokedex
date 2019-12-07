@@ -28,7 +28,6 @@ describe('Testando componente da Home', () => {
     const response = await fetch(apiEndpoint)
     const { results } = await response.json()
     const pokemon = { pokemons: results, status: 'done' }
-    console.log(pokemon)
     const component = mount(<Home pokemon={pokemon} />)
     expect(component.find(CardGrid).length).toBeTruthy()
   })
