@@ -6,5 +6,8 @@ const mapStateToProps = ({ pokemon }) => ({
   pokemon
 })
 
-export const Home = connect(mapStateToProps, { fetchPokemons, fetchPokemon, clearCurrentPokemon }
-)(HomeComponent)
+export const Home = connect(mapStateToProps, {
+  fetchPokemons,
+  fetchPokemon,
+  clearCurrentPokemon
+})(HomeComponent)

@@ -12,12 +12,18 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
     {pokemons.map(({ name, url }, index) => {
       const pokemonNumber = offset ? offset + index + 1 : index + 1
       return (
-        <Grid item xs={2} key={name} onClick={() => handlePokemonClick(url)}>
+        <Grid
+          item
+          xs={12}
+          md={3}
+          key={name}
+          onClick={() => handlePokemonClick(url)}
+        >
           <StyledCard>
             <StyledCardContent>
               <Box display="flex" justifyContent="center">
                 <Typography>
-                    #{pokemonNumber} {name.toUpperCase()}
+                  #{pokemonNumber} {name.toUpperCase()}
                 </Typography>
               </Box>
             </StyledCardContent>
@@ -28,10 +34,10 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
   </Grid>
 )
 const StyledCard = styled(Card)`
-    transition: all 0.1s ease-out !important;
-     &:hover  {
-      transform: scale(1.15); 
-      border: 1px solid blue
+  transition: all 0.1s ease-out !important;
+  &:hover {
+    transform: scale(1.15);
+    border: 1px solid blue;
   }
   cursor: pointer;
 `

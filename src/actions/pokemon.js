@@ -7,7 +7,7 @@ export const fetchPokemons = (next, prevPressed) => dispatch => {
     const args = new URLSearchParams(url.search)
     offset = parseInt(args.get('offset'))
     if (prevPressed) {
-      offset = offset == 20 ? 0 : offset - 40
+      offset = offset === 20 ? 0 : offset - 40
       args.set('offset', offset)
       apiEndpoint = `https://pokeapi.co/api/v2/pokemon/?${args.toString()}`
     }

@@ -3,11 +3,11 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import PropTypes from 'prop-types'
 import { CardGrid, ModalPokemon, Loading } from '.'
-import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import pokedexLogo from '../assets/pokedex.png'
 import styled from 'styled-components'
+import Container from '@material-ui/core/Container'
 
 export const Home = ({
   pokemon,
@@ -24,42 +24,46 @@ export const Home = ({
   const handlePokemonClick = url => fetchPokemon(url)
   const handleModalDismiss = () => clearCurrentPokemon()
   const renderCardContainer = () => (
-    <CenteredDiv>
-      <MaxWidthDiv>
-        <CardContent>
-          <CenteredDiv>
-            <StyledImage src={pokedexLogo} />
-          </CenteredDiv>
-          <CardGrid
-            pokemons={pokemons}
-            offset={parseInt(offset)}
-            handlePokemonClick={handlePokemonClick}
-          />
-          <Box display="flex" justifyContent="center" m={1} p={1}>
-            <Box p={1}>
-              {!!offset && (
-                <Button
-                  onClick={() => fetchPokemons(next, true)}
-                  variant="contained"
-                  color="primary"
-                >
-                  Previous
-                </Button>
-              )}
-            </Box>
-            <Box p={1}>
-              <Button onClick={() => fetchPokemons(next)} variant="contained" color="primary">
-                Next
+    <Container maxWidth="lg">
+      <CardContent>
+        <CenteredDiv>
+          <StyledImage src={pokedexLogo} />
+        </CenteredDiv>
+        <CardGrid
+          pokemons={pokemons}
+          offset={parseInt(offset)}
+          handlePokemonClick={handlePokemonClick}
+        />
+        <Box display="flex" justifyContent="center" m={1} p={1}>
+          <Box p={1}>
+            {!!offset && (
+              <Button
+                onClick={() => fetchPokemons(next, true)}
+                variant="contained"
+                color="primary"
+              >
+                Previous
               </Button>
-            </Box>
+            )}
           </Box>
-        </CardContent>
-      </MaxWidthDiv>
-      <ModalPokemon
-        handleClose={handleModalDismiss}
-        currentPokemon={currentPokemon}
-      />
-    </CenteredDiv>
+          <Box p={1}>
+            <Button
+              onClick={() => fetchPokemons(next)}
+              variant="contained"
+              color="primary"
+            >
+              Next
+            </Button>
+          </Box>
+        </Box>
+      </CardContent>
+      {currentPokemon && (
+        <ModalPokemon
+          handleClose={handleModalDismiss}
+          currentPokemon={currentPokemon}
+        />
+      )}
+    </Container>
   )
 
   const renderError = () => (
@@ -80,11 +84,8 @@ const CenteredDiv = styled.div`
   justify-content: center;
 `
 const StyledImage = styled.img`
-  width: 600px;
+  width: 80%;
   height: 200px;
-`
-const MaxWidthDiv = styled.div`
-  max-width: 1280px;
 `
 
 Home.propTypes = {
