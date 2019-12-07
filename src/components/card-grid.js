@@ -12,17 +12,15 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
     {pokemons.map(({ name, url }, index) => {
       const pokemonNumber = offset ? offset + index + 1 : index + 1
       return (
-        <Grid
-          item
-          xs={12}
-          md={3}
-          key={name}
-        >
+        <Grid item xs={12} md={3} key={name}>
           <StyledCard onClick={() => handlePokemonClick(url)}>
             <StyledCardContent>
               <Box display="flex" justifyContent="center">
-                <Typography>
-                  #{pokemonNumber} {name.toUpperCase()}
+                <Typography color="textSecondary" display="inline">
+                  #{`${pokemonNumber} `}
+                  <StyledTypography color="primary" display="inline">
+                    {toCamelCase(name)}
+                  </StyledTypography>
                 </Typography>
               </Box>
             </StyledCardContent>
@@ -43,6 +41,12 @@ const StyledCard = styled(Card)`
 const StyledCardContent = styled(CardContent)`
   padding-bottom: 16px !important;
 `
+const StyledTypography = styled(Typography)`
+  font-weight: bolder !important;
+`
+
+const toCamelCase = text => `${text[0].toUpperCase()}${text.slice(1)}`
+
 CardGrid.propTypes = {
   pokemons: PropTypes.arrayOf(Object),
   offset: PropTypes.number,
