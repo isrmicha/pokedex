@@ -27,6 +27,7 @@ const ModalPokemon = ({ currentPokemon, handleClose }) => {
   if (status === 'loading') return renderLoadingDialog()
 
   const { front_default: frontDefault } = sprites
+
   return (
     <Dialog onClose={handleClose} open={!!currentPokemon}>
       <Grid

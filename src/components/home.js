@@ -9,8 +9,12 @@ import pokedexLogo from '../assets/pokedex.png'
 import styled from 'styled-components'
 import Container from '@material-ui/core/Container'
 
-const ModalPokemon = lazy(() => import('./modal-pokemon'))
-const CardGrid = lazy(() => import('./card-grid'))
+const ModalPokemon = lazy(() =>
+  import(/* webpackChunkName: "Modal-Pokemon" */ './modal-pokemon')
+)
+const CardGrid = lazy(() =>
+  import(/* webpackChunkName: "Card-Grid" */ './card-grid')
+)
 
 export const Home = ({
   pokemon,
@@ -79,7 +83,9 @@ export const Home = ({
       </Typography>
     </Box>
   )
+
   if (!status || status === 'loading') return <Loading />
+
   if (status === 'error') return renderError()
 
   return renderCardContainer()

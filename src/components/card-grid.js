@@ -17,11 +17,11 @@ const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
             <StyledCardContent>
               <Box display="flex" justifyContent="center">
                 <Typography color="textSecondary" display="inline">
-                  #{`${pokemonNumber} `}
-                  <StyledTypography color="primary" display="inline">
-                    {toCamelCase(name)}
-                  </StyledTypography>
+                  {`#${pokemonNumber}`} &nbsp;
                 </Typography>
+                <StyledTypography color="primary" display="inline">
+                  {toCamelCase(name)}
+                </StyledTypography>
               </Box>
             </StyledCardContent>
           </StyledCard>
@@ -36,7 +36,7 @@ export default React.memo(CardGrid)
 const StyledCard = styled(Card)`
   transition: all 0.1s ease-out !important;
   &:hover {
-    transform: scale(1.10);
+    transform: scale(1.1);
     border: 1px solid blue;
   }
   cursor: pointer;

@@ -1,14 +1,6 @@
 export const fetchPokemons = (next, prevPressed) => dispatch => {
   dispatch(fetchPokemonsRequest())
 
-  var worker = new Worker('../worker.js')
-
-  worker.addEventListener('message', function (e) {
-    console.log('Worker said: ', e.data)
-  }, false)
-  
-  worker.postMessage('Hello World') // Send data to our worker.
-
   let apiEndpoint = next || 'https://pokeapi.co/api/v2/pokemon/'
   let offset
   if (next) {
