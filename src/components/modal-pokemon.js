@@ -9,7 +9,7 @@ import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 
-export const ModalPokemon = ({ currentPokemon, handleClose }) => {
+const ModalPokemon = ({ currentPokemon, handleClose }) => {
   if (!currentPokemon) return null
   const {
     order,
@@ -70,6 +70,8 @@ export const ModalPokemon = ({ currentPokemon, handleClose }) => {
     </Dialog>
   )
 }
+
+export default React.memo(ModalPokemon)
 
 const BigAvatar = styled.img`
   width: 200px;

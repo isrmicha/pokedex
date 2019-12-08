@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import Box from '@material-ui/core/Box'
 import styled from 'styled-components'
 
-export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
+const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
   <Grid container spacing={3}>
     {pokemons.map(({ name, url }, index) => {
       const pokemonNumber = offset ? offset + index + 1 : index + 1
@@ -30,6 +30,9 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
     })}
   </Grid>
 )
+
+export default React.memo(CardGrid)
+
 const StyledCard = styled(Card)`
   transition: all 0.1s ease-out !important;
   &:hover {

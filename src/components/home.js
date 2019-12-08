@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import PropTypes from 'prop-types'
-import { CardGrid, ModalPokemon, Loading } from '.'
+import { Loading } from '.'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import pokedexLogo from '../assets/pokedex.png'
 import styled from 'styled-components'
 import Container from '@material-ui/core/Container'
+
+const ModalPokemon = lazy(() => import('./modal-pokemon'))
+const CardGrid = lazy(() => import('./card-grid'))
 
 export const Home = ({
   pokemon,
@@ -29,11 +32,13 @@ export const Home = ({
         <CenteredDiv>
           <StyledImage src={pokedexLogo} />
         </CenteredDiv>
-        <CardGrid
-          pokemons={pokemons}
-          offset={parseInt(offset)}
-          handlePokemonClick={handlePokemonClick}
-        />
+        <Suspense fallback={<Loading />}>
+          <CardGrid
+            pokemons={pokemons}
+            offset={parseInt(offset)}
+            handlePokemonClick={handlePokemonClick}
+          />
+        </Suspense>
         <Box display="flex" justifyContent="center" m={1} p={1}>
           <Box p={1}>
             <Button
@@ -57,10 +62,12 @@ export const Home = ({
         </Box>
       </CardContent>
       {currentPokemon && (
-        <ModalPokemon
-          handleClose={handleModalDismiss}
-          currentPokemon={currentPokemon}
-        />
+        <Suspense fallback={<Loading />}>
+          <ModalPokemon
+            handleClose={handleModalDismiss}
+            currentPokemon={currentPokemon}
+          />
+        </Suspense>
       )}
     </Container>
   )
