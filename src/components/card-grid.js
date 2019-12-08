@@ -33,7 +33,7 @@ export const CardGrid = ({ pokemons, offset, handlePokemonClick }) => (
 const StyledCard = styled(Card)`
   transition: all 0.1s ease-out !important;
   &:hover {
-    transform: scale(1.15);
+    transform: scale(1.10);
     border: 1px solid blue;
   }
   cursor: pointer;
