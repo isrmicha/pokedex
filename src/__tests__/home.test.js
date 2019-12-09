@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react'
-import { Home, CardGrid } from '../components'
+import { Home } from '../components'
+import CardGrid from '../components/card-grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
@@ -29,6 +30,6 @@ describe('Testando componente da Home', () => {
     const { results } = await response.json()
     const pokemon = { pokemons: results, status: 'done' }
     const component = mount(<Home pokemon={pokemon} />)
-    expect(component.find(CardGrid).length).toBeTruthy()
+    setTimeout(() => expect(component.find(CardGrid).length).toBeTruthy(), 0)
   })
 })
