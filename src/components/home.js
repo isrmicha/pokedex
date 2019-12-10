@@ -30,49 +30,19 @@ export const Home = ({
   }, [])
   const handlePokemonClick = url => fetchPokemon(url)
   const handleModalDismiss = () => clearCurrentPokemon()
+
   const renderCardContainer = () => (
     <Container maxWidth="lg">
       <CardContent>
         <CenteredDiv>
           <StyledImage src={pokedexLogo} />
         </CenteredDiv>
-        <Suspense fallback={<Loading />}>
-          <CardGrid
-            pokemons={pokemons}
-            offset={parseInt(offset)}
-            handlePokemonClick={handlePokemonClick}
-          />
-        </Suspense>
-        <Box display="flex" justifyContent="center" m={1} p={1}>
-          <Box p={1}>
-            <Button
-              disabled={!offset}
-              onClick={() => fetchPokemons(next, true)}
-              variant="contained"
-              color="primary"
-            >
-              Previous
-            </Button>
-          </Box>
-          <Box p={1}>
-            <Button
-              onClick={() => fetchPokemons(next)}
-              variant="contained"
-              color="primary"
-            >
-              Next
-            </Button>
-          </Box>
-        </Box>
+        {!status || status === 'loading' ? (
+          <Loading />
+        ) : (
+          renderCardContainerContent()
+        )}
       </CardContent>
-      {currentPokemon && (
-        <Suspense fallback={<Loading />}>
-          <ModalPokemon
-            handleClose={handleModalDismiss}
-            currentPokemon={currentPokemon}
-          />
-        </Suspense>
-      )}
     </Container>
   )
 
@@ -84,7 +54,46 @@ export const Home = ({
     </Box>
   )
 
-  if (!status || status === 'loading') return <Loading />
+  const renderCardContainerContent = () => (
+    <>
+      <Suspense fallback={<Loading />}>
+        <CardGrid
+          pokemons={pokemons}
+          offset={parseInt(offset)}
+          handlePokemonClick={handlePokemonClick}
+        />
+      </Suspense>
+      <Box display="flex" justifyContent="center" m={1} p={1}>
+        <Box p={1}>
+          <Button
+            disabled={!offset}
+            onClick={() => fetchPokemons(next, true)}
+            variant="contained"
+            color="primary"
+          >
+            Previous
+          </Button>
+        </Box>
+        <Box p={1}>
+          <Button
+            onClick={() => fetchPokemons(next)}
+            variant="contained"
+            color="primary"
+          >
+            Next
+          </Button>
+        </Box>
+      </Box>
+      {currentPokemon && (
+        <Suspense fallback={<Loading />}>
+          <ModalPokemon
+            handleClose={handleModalDismiss}
+            currentPokemon={currentPokemon}
+          />
+        </Suspense>
+      )}
+    </>
+  )
 
   if (status === 'error') return renderError()
 
