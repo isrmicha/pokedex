@@ -1,8 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react'
-import { Home } from '../components'
+import { Home, Loading } from '../components'
 import CardGrid from '../components/card-grid'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Enzyme, { mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import { Typography } from '@material-ui/core'
@@ -13,7 +12,7 @@ describe('Testando componente da Home', () => {
   test('Deve renderizar loading enquanto o status seja loading', () => {
     const pokemon = { status: 'loading' }
     const component = mount(<Home pokemon={pokemon} />)
-    expect(component.find(CircularProgress).length).toBeTruthy()
+    expect(component.find(Loading).length).toBeTruthy()
   })
 
   test('Deve renderizar texto de erro caso aconteça um error no request', () => {
