@@ -36,7 +36,7 @@ export default React.memo(CardGrid)
 const StyledCard = styled(Card)`
   transition: all 0.1s ease-out !important;
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.09);
     border: 1px solid blue;
   }
   cursor: pointer;
