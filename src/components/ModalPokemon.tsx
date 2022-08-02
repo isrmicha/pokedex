@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { usePokemonQuery } from "../querys/pokedex";
 import { getPokemonImage } from "../utils/image";
+import { toNormalCase } from "../utils/string";
 
 const style = {
   position: "absolute" as "absolute",
@@ -49,7 +50,7 @@ export const ModalPokemon = ({
               {pokemon.id}
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              {pokemon.name}
+              {toNormalCase(pokemon.name)}
             </Typography>
             <img src={getPokemonImage(pokemon.sprites)} />
             <Button

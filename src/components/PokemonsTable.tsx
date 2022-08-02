@@ -7,6 +7,7 @@ import {
   TableBody,
   TableCell,
   CircularProgress,
+  tableCellClasses,
 } from "@mui/material";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -16,7 +17,9 @@ import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
 import { getPokemonsQuery } from "../querys/pokedex";
 import { Pokemon } from "../types/pokemon";
 import { getPokemonImage } from "../utils/image";
-let audio = null;
+import { toNormalCase } from "../utils/string";
+import styled from "styled-components";
+
 export const PokemonsTable = ({
   setSelectedPokemonId,
 }: {
@@ -42,13 +45,13 @@ export const PokemonsTable = ({
   console.log(data);
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="customized table">
+      <Table>
         <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Sprite</TableCell>
-          </TableRow>
+          <StyledTableRow>
+            <StyledTableCell>ID</StyledTableCell>
+            <StyledTableCell>Name</StyledTableCell>
+            <StyledTableCell>Sprite</StyledTableCell>
+          </StyledTableRow>
         </TableHead>
         <TableBody>
           {isLoading ? (
@@ -58,17 +61,20 @@ export const PokemonsTable = ({
               {data?.pages.map((page) =>
                 page.map(({ id, name, sprites }: Pokemon, index: number) => (
                   <>
-                    <TableRow key={id} onClick={() => setSelectedPokemonId(id)}>
-                      <TableCell component="th" scope="row">
+                    <StyledTableRow
+                      key={id}
+                      onClick={() => setSelectedPokemonId(id)}
+                    >
+                      <StyledTableCell component="th" scope="row">
                         #{id}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {name}
-                      </TableCell>
-                      <TableCell>
-                        <img src={getPokemonImage(sprites)} />
-                      </TableCell>
-                    </TableRow>
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {toNormalCase(name)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <img width={50} src={getPokemonImage(sprites)} />
+                      </StyledTableCell>
+                    </StyledTableRow>
                     {index === LIMIT_PER_PAGE - 1 && <div ref={ref} />}
                   </>
                 ))
@@ -80,3 +86,23 @@ export const PokemonsTable = ({
     </TableContainer>
   );
 };
+
+const StyledTableCell = styled(TableCell)(() => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "rgb(0, 0, 0)",
+    color: "rgb(255, 255, 255)",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(() => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));

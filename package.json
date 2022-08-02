@@ -21,7 +21,8 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-intersection-observer": "^9.4.0"
+    "react-intersection-observer": "^9.4.0",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@types/node": "latest",

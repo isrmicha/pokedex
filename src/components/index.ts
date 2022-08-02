@@ -1,2 +1,2 @@
 export * from "./Home";
-// export * from "./ModalPokemon";
+export * from "./ModalPokemon";
