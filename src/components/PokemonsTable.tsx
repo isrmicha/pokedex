@@ -19,6 +19,7 @@ import { Pokemon } from "../types/pokemon";
 import { getPokemonImage } from "../utils/image";
 import { toNormalCase } from "../utils/string";
 import styled from "styled-components";
+import { Loading } from "./Loading";
 
 export const PokemonsTable = ({
   setSelectedPokemonId,
@@ -43,8 +44,12 @@ export const PokemonsTable = ({
       fetchNextPage();
     }
   }, [inView]);
-  console.log(data);
-  return (
+
+  return error ? (
+    <div>Aconteceu algo errado...</div>
+  ) : isLoading ? (
+    <Loading />
+  ) : (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -55,35 +60,29 @@ export const PokemonsTable = ({
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {error ? (
-            <div>Aconteceu algo errado...</div>
-          ) : isLoading ? (
-            <CircularProgress />
-          ) : (
-            <>
-              {data?.pages.map((page) =>
-                page.map(({ id, name, sprites }: Pokemon, index: number) => (
-                  <>
-                    <StyledTableRow
-                      key={id}
-                      onClick={() => setSelectedPokemonId(id)}
-                    >
-                      <StyledTableCell component="th" scope="row">
-                        #{id}
-                      </StyledTableCell>
-                      <StyledTableCell component="th" scope="row">
-                        {toNormalCase(name)}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <img width={50} src={getPokemonImage(sprites)} />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                    {index === LIMIT_PER_PAGE - 1 && <div ref={ref} />}
-                  </>
-                ))
-              )}
-            </>
-          )}
+          <>
+            {data?.pages.map((page) =>
+              page.map(({ id, name, sprites }: Pokemon, index: number) => (
+                <>
+                  <StyledTableRow
+                    key={id}
+                    onClick={() => setSelectedPokemonId(id)}
+                  >
+                    <StyledTableCell component="th" scope="row">
+                      #{id}
+                    </StyledTableCell>
+                    <StyledTableCell component="th" scope="row">
+                      {toNormalCase(name)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <img width={50} src={getPokemonImage(sprites)} />
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  {index === LIMIT_PER_PAGE - 1 && <div ref={ref} />}
+                </>
+              ))
+            )}
+          </>
         </TableBody>
       </Table>
     </TableContainer>

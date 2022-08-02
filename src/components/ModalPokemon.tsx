@@ -4,12 +4,14 @@ import {
   Box,
   Typography,
   CircularProgress,
+  Skeleton,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { usePokemonQuery } from "../querys/pokedex";
 import { getPokemonImage } from "../utils/image";
 import { toNormalCase } from "../utils/string";
+import { Loading } from "./Loading";
 
 const style = {
   position: "absolute" as "absolute",
@@ -45,7 +47,7 @@ export const ModalPokemon = ({
         {error ? (
           <div>Aconteceu algo errado...</div>
         ) : isLoading ? (
-          <CircularProgress />
+          <Loading />
         ) : (
           <>
             <Typography id="modal-modal-title" variant="h6" component="h2">
