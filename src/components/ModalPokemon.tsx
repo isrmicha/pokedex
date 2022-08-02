@@ -42,7 +42,9 @@ export const ModalPokemon = ({
   return (
     <Modal open={true} onClose={() => setSelectedPokemonId(null)}>
       <Box sx={style}>
-        {isLoading ? (
+        {error ? (
+          <div>Aconteceu algo errado...</div>
+        ) : isLoading ? (
           <CircularProgress />
         ) : (
           <>

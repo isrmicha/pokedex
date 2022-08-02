@@ -28,6 +28,7 @@ export const PokemonsTable = ({
   const [offset, setOffset] = useState(0);
   const {
     isLoading,
+    error,
     data,
     isFetchingPreviousPage,
     fetchNextPage,
@@ -54,7 +55,9 @@ export const PokemonsTable = ({
           </StyledTableRow>
         </TableHead>
         <TableBody>
-          {isLoading ? (
+          {error ? (
+            <div>Aconteceu algo errado...</div>
+          ) : isLoading ? (
             <CircularProgress />
           ) : (
             <>
