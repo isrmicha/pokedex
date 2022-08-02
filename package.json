@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "@types/styled-components": "^5.1.25",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"
