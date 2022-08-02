@@ -8,6 +8,7 @@ import {
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { usePokemonQuery } from "../querys/pokedex";
+import { getPokemonImage } from "../utils/image";
 
 const style = {
   position: "absolute" as "absolute",
@@ -50,9 +51,7 @@ export const ModalPokemon = ({
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               {pokemon.name}
             </Typography>
-            <img
-              src={JSON.parse(pokemon.sprites?.[0]?.sprites)?.front_default}
-            />
+            <img src={getPokemonImage(pokemon.sprites)} />
             <Button
               variant="contained"
               disabled={selectedPokemonId === 1}

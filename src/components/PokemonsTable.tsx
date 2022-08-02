@@ -15,6 +15,7 @@ import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
 import { getPokemonsQuery } from "../querys/pokedex";
 import { Pokemon } from "../types/pokemon";
+import { getPokemonImage } from "../utils/image";
 let audio = null;
 export const PokemonsTable = ({
   setSelectedPokemonId,
@@ -65,9 +66,7 @@ export const PokemonsTable = ({
                         {name}
                       </TableCell>
                       <TableCell>
-                        <img
-                          src={JSON.parse(sprites?.[0]?.sprites)?.front_default}
-                        />
+                        <img src={getPokemonImage(sprites)} />
                       </TableCell>
                     </TableRow>
                     {index === LIMIT_PER_PAGE - 1 && <div ref={ref} />}
