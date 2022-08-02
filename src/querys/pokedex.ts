@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { POKEAPI_ENDPOINT, POKEMON_QUERY_KEY } from "../constants/query";
 import { request, gql } from "graphql-request";
+
 export const getPokemonsQuery = async ({ pageParam = 0 }) => {
   const { pokemon_v2_pokemon } = await request(
     POKEAPI_ENDPOINT,

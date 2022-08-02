@@ -1,16 +1,4 @@
-import { Suspense, lazy, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { POKEAPI_ENDPOINT, POKEMONS_QUERY_KEY } from "../constants/query";
-import { getPokemonsQuery } from "../querys/pokedex";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { useState } from "react";
 import { PokemonsTable } from "./PokemonsTable";
 import { ModalPokemon } from "./ModalPokemon";
 
@@ -22,7 +10,9 @@ import { ModalPokemon } from "./ModalPokemon";
 // );
 
 const Home = () => {
-  const [selectedPokemonId, setSelectedPokemonId] = useState(null);
+  const [selectedPokemonId, setSelectedPokemonId] = useState<null | number>(
+    null
+  );
 
   return (
     <>

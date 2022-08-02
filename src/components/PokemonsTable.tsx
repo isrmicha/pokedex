@@ -9,16 +9,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
 import { getPokemonsQuery } from "../querys/pokedex";
+import { Pokemon } from "../types/pokemon";
 let audio = null;
 export const PokemonsTable = ({
   setSelectedPokemonId,
 }: {
-  setSelectedPokemonId: (arg0: number) => void;
+  setSelectedPokemonId: Dispatch<SetStateAction<null | number>>;
 }) => {
   const [offset, setOffset] = useState(0);
   const {
@@ -53,8 +54,8 @@ export const PokemonsTable = ({
             <CircularProgress />
           ) : (
             <>
-              {data.pages.map((page) =>
-                page.map(({ id, name, sprites }, index) => (
+              {data?.pages.map((page) =>
+                page.map(({ id, name, sprites }: Pokemon, index: number) => (
                   <>
                     <TableRow key={id} onClick={() => setSelectedPokemonId(id)}>
                       <TableCell component="th" scope="row">

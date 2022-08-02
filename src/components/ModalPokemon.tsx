@@ -5,11 +5,9 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
-import { POKEMON_QUERY_KEY } from "../constants/query";
-import { getPokemonQuery, usePokemonQuery } from "../querys/pokedex";
+import { usePokemonQuery } from "../querys/pokedex";
 
 const style = {
   position: "absolute" as "absolute",
@@ -28,7 +26,7 @@ export const ModalPokemon = ({
   setSelectedPokemonId,
 }: {
   selectedPokemonId: number;
-  setSelectedPokemonId: (arg0: number | null) => void;
+  setSelectedPokemonId: Dispatch<SetStateAction<null | number>>;
 }) => {
   const {
     isLoading,
