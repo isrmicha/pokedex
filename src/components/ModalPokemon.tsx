@@ -79,15 +79,16 @@ export const ModalPokemon = ({
         ) : (
           <>
             <Paper elevation={3} variant="outlined" square sx={{ padding: 5 }}>
-              <Grid container direction="row">
+              <Grid container direction="row" display={"flex"}>
                 <Grid
                   item
                   xs={3}
                   justifyContent="center"
                   alignContent={"center"}
+                  display={"flex"}
                 >
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     disabled={selectedPokemonId === 1}
                     onClick={() =>
                       selectedPokemonId > 1 &&
@@ -102,6 +103,7 @@ export const ModalPokemon = ({
                   xs={6}
                   justifyContent="center"
                   alignContent={"center"}
+                  display={"flex"}
                 >
                   <img src={getPokemonImage(pokemon.sprites)} />
                 </Grid>
@@ -111,9 +113,10 @@ export const ModalPokemon = ({
                   xs={3}
                   justifyContent="center"
                   alignContent={"center"}
+                  display={"flex"}
                 >
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => setSelectedPokemonId(selectedPokemonId + 1)}
                   >
                     <ArrowForwardIcon />
