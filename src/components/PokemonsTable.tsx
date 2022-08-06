@@ -3,23 +3,20 @@ import {
   Paper,
   Table,
   TableHead,
-  TableRow,
   TableBody,
-  TableCell,
-  CircularProgress,
-  tableCellClasses,
+  Chip,
+  Stack,
 } from "@mui/material";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { POKEMON_CRY_URL } from "../constants/pokemon";
 import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
 import { getPokemonsQuery } from "../querys/pokedex";
 import { Pokemon } from "../types/pokemon";
 import { getPokemonImage } from "../utils/image";
 import { toNormalCase } from "../utils/string";
-import styled from "styled-components";
 import { Loading } from "./Loading";
+import { StyledTableRow, StyledTableCell } from "./Table.style";
 
 export const PokemonsTable = ({
   setSelectedPokemonId,
@@ -35,7 +32,7 @@ export const PokemonsTable = ({
     fetchNextPage,
     hasPreviousPage,
   } = useInfiniteQuery([POKEMONS_QUERY_KEY], getPokemonsQuery, {
-    getNextPageParam: () => offset ?? undefined,
+    getNextPageParam: () => offset,
   });
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -44,7 +41,6 @@ export const PokemonsTable = ({
       fetchNextPage();
     }
   }, [inView]);
-
   return error ? (
     <div>Aconteceu algo errado...</div>
   ) : isLoading ? (
@@ -57,30 +53,43 @@ export const PokemonsTable = ({
             <StyledTableCell>ID</StyledTableCell>
             <StyledTableCell>Name</StyledTableCell>
             <StyledTableCell>Sprite</StyledTableCell>
+            <StyledTableCell>Types</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>
           <>
-            {data?.pages.map((page) =>
-              page.map(({ id, name, sprites }: Pokemon, index: number) => (
-                <>
-                  <StyledTableRow
-                    key={id}
-                    onClick={() => setSelectedPokemonId(id)}
-                  >
-                    <StyledTableCell component="th" scope="row">
-                      #{id}
-                    </StyledTableCell>
-                    <StyledTableCell component="th" scope="row">
-                      {toNormalCase(name)}
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <img width={50} src={getPokemonImage(sprites)} />
-                    </StyledTableCell>
-                  </StyledTableRow>
-                  {index === LIMIT_PER_PAGE - 1 && <div ref={ref} />}
-                </>
-              ))
+            {data?.pages.map((page, indexPages) =>
+              page.map(
+                ({ id, name, sprites, types }: Pokemon, index: number) => (
+                  <>
+                    <StyledTableRow
+                      key={id}
+                      onClick={() => setSelectedPokemonId(id)}
+                    >
+                      <StyledTableCell component="th" scope="row">
+                        #{id}
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {toNormalCase(name)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <img width={50} src={getPokemonImage(sprites)} />
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Stack direction="row" spacing={1}>
+                          {types.map(({ type: { name } }) => (
+                            <Chip label={name} color="default" />
+                          ))}
+                        </Stack>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                    {index === page.length - 1 &&
+                      indexPages === data.pages.length - 1 && (
+                        <div ref={ref}>Loading...</div>
+                      )}
+                  </>
+                )
+              )
             )}
           </>
         </TableBody>
@@ -88,23 +97,3 @@ export const PokemonsTable = ({
     </TableContainer>
   );
 };
-
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "rgb(0, 0, 0)",
-    color: "rgb(255, 255, 255)",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));

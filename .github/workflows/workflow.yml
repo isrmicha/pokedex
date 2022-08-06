@@ -1,5 +1,4 @@
-name: Node CI
-
+name: Workflow
 on: [push]
 
 jobs:

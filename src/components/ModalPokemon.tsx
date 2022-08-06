@@ -1,10 +1,14 @@
 import {
   Button,
-  Modal,
   Box,
   Typography,
-  CircularProgress,
-  Skeleton,
+  Dialog,
+  AppBar,
+  IconButton,
+  Toolbar,
+  Grid,
+  Chip,
+  Stack,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
@@ -12,18 +16,13 @@ import { usePokemonQuery } from "../querys/pokedex";
 import { getPokemonImage } from "../utils/image";
 import { toNormalCase } from "../utils/string";
 import { Loading } from "./Loading";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import { Pokemon } from "../types/pokemon";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+let audio: HTMLAudioElement | null = null;
 
 export const ModalPokemon = ({
   selectedPokemonId,
@@ -37,45 +36,90 @@ export const ModalPokemon = ({
     error,
     data: pokemon,
   } = usePokemonQuery(selectedPokemonId);
-  useEffect(() => {
-    const audio = new Audio(`${POKEMON_CRY_URL}${selectedPokemonId}.mp3`);
+
+  const handlePlayCry = () => {
+    audio?.pause();
+    audio = new Audio(`${POKEMON_CRY_URL}${selectedPokemonId}.mp3`);
     audio.play();
-  }, [selectedPokemonId]);
+  };
+  const handleClose = () => setSelectedPokemonId(null);
   return (
-    <Modal open={true} onClose={() => setSelectedPokemonId(null)}>
-      <Box sx={style}>
+    <Dialog open={true} onClose={handleClose}>
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleClose}
+                aria-label="close"
+              >
+                #{pokemon.id}
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                {toNormalCase(pokemon.name)}
+              </Typography>
+              <Button autoFocus color="inherit" onClick={handleClose}>
+                <CloseIcon />
+              </Button>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+      <Box>
         {error ? (
           <div>Aconteceu algo errado...</div>
         ) : isLoading ? (
           <Loading />
         ) : (
           <>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              {pokemon.id}
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              {toNormalCase(pokemon.name)}
-            </Typography>
-            <img src={getPokemonImage(pokemon.sprites)} />
-            <Button
-              variant="contained"
-              disabled={selectedPokemonId === 1}
-              onClick={() =>
-                selectedPokemonId > 1 &&
-                setSelectedPokemonId(selectedPokemonId - 1)
-              }
-            >
-              Voltar
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => setSelectedPokemonId(selectedPokemonId + 1)}
-            >
-              Avançar
-            </Button>
+            <Grid container direction="row">
+              <Grid item>
+                <Button
+                  variant="contained"
+                  disabled={selectedPokemonId === 1}
+                  onClick={() =>
+                    selectedPokemonId > 1 &&
+                    setSelectedPokemonId(selectedPokemonId - 1)
+                  }
+                >
+                  <ArrowBackIcon />
+                </Button>
+              </Grid>
+              <Grid item>
+                <img src={getPokemonImage(pokemon.sprites)} />
+              </Grid>
+              <Grid item>
+                <IconButton
+                  color="primary"
+                  component="label"
+                  onClick={handlePlayCry}
+                >
+                  <VolumeUpIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Stack direction="row" spacing={1}>
+                  {(pokemon as Pokemon).types.map(({ type: { name } }) => (
+                    <Chip label={name} color="default" />
+                  ))}
+                </Stack>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => setSelectedPokemonId(selectedPokemonId + 1)}
+                >
+                  <ArrowForwardIcon />
+                </Button>
+              </Grid>
+            </Grid>
           </>
         )}
       </Box>
-    </Modal>
+    </Dialog>
   );
 };

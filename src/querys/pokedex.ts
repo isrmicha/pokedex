@@ -13,6 +13,11 @@ export const getPokemonsQuery = async ({ pageParam = 0 }) => {
           sprites: pokemon_v2_pokemonsprites {
             sprites
           }
+          types: pokemon_v2_pokemontypes{
+            type: pokemon_v2_type {
+              name
+            }
+          }
         }
       }
     `
@@ -31,6 +36,11 @@ export const usePokemonQuery = (id: number) => {
           name
           sprites: pokemon_v2_pokemonsprites {
             sprites
+          }
+          types: pokemon_v2_pokemontypes{
+            type: pokemon_v2_type {
+              name
+            }
           }
         }
       }
