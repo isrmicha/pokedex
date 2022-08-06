@@ -23,17 +23,14 @@ export const PokemonsTable = ({
 }: {
   setSelectedPokemonId: Dispatch<SetStateAction<null | number>>;
 }) => {
-  const [offset, setOffset] = useState(0);
-  const {
-    isLoading,
-    error,
-    data,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery([POKEMONS_QUERY_KEY], getPokemonsQuery, {
-    getNextPageParam: () => offset,
-  });
+  const [offset, setOffset] = useState(20);
+  const { isLoading, error, data, fetchNextPage } = useInfiniteQuery(
+    [POKEMONS_QUERY_KEY],
+    getPokemonsQuery,
+    {
+      getNextPageParam: () => offset,
+    }
+  );
   const { ref, inView } = useInView();
   useEffect(() => {
     if (inView) {

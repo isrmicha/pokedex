@@ -9,7 +9,7 @@ const Home = dynamic(() => import("../src/components/Home"), {
 
 const HomePage: NextPage = () => {
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" disableGutters>
       <Box>
         <Home />
       </Box>

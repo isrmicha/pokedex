@@ -9,6 +9,7 @@ import {
   Grid,
   Chip,
   Stack,
+  Paper,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
@@ -21,6 +22,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { Pokemon } from "../types/pokemon";
+import { padding } from "@mui/system";
 
 let audio: HTMLAudioElement | null = null;
 
@@ -76,47 +78,65 @@ export const ModalPokemon = ({
           <Loading />
         ) : (
           <>
-            <Grid container direction="row">
-              <Grid item>
-                <Button
-                  variant="contained"
-                  disabled={selectedPokemonId === 1}
-                  onClick={() =>
-                    selectedPokemonId > 1 &&
-                    setSelectedPokemonId(selectedPokemonId - 1)
-                  }
+            <Paper elevation={3} variant="outlined" square sx={{ padding: 5 }}>
+              <Grid container direction="row">
+                <Grid
+                  item
+                  xs={3}
+                  justifyContent="center"
+                  alignContent={"center"}
                 >
-                  <ArrowBackIcon />
-                </Button>
-              </Grid>
-              <Grid item>
-                <img src={getPokemonImage(pokemon.sprites)} />
-              </Grid>
-              <Grid item>
-                <IconButton
-                  color="primary"
-                  component="label"
-                  onClick={handlePlayCry}
+                  <Button
+                    variant="contained"
+                    disabled={selectedPokemonId === 1}
+                    onClick={() =>
+                      selectedPokemonId > 1 &&
+                      setSelectedPokemonId(selectedPokemonId - 1)
+                    }
+                  >
+                    <ArrowBackIcon />
+                  </Button>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                  justifyContent="center"
+                  alignContent={"center"}
                 >
-                  <VolumeUpIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <Stack direction="row" spacing={1}>
-                  {(pokemon as Pokemon).types.map(({ type: { name } }) => (
-                    <Chip label={name} color="default" />
-                  ))}
-                </Stack>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="contained"
-                  onClick={() => setSelectedPokemonId(selectedPokemonId + 1)}
+                  <img src={getPokemonImage(pokemon.sprites)} />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={3}
+                  justifyContent="center"
+                  alignContent={"center"}
                 >
-                  <ArrowForwardIcon />
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => setSelectedPokemonId(selectedPokemonId + 1)}
+                  >
+                    <ArrowForwardIcon />
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="primary"
+                    component="label"
+                    onClick={handlePlayCry}
+                  >
+                    <VolumeUpIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <Stack direction="row" spacing={1}>
+                    {(pokemon as Pokemon).types.map(({ type: { name } }) => (
+                      <Chip label={name} color="default" />
+                    ))}
+                  </Stack>
+                </Grid>
               </Grid>
-            </Grid>
+            </Paper>
           </>
         )}
       </Box>
