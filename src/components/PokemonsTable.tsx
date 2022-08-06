@@ -14,7 +14,6 @@ import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
 import { getPokemonsQuery } from "../querys/pokedex";
 import { Pokemon } from "../types/pokemon";
 import { getPokemonImage } from "../utils/image";
-import { toNormalCase } from "../utils/string";
 import { Loading } from "./Loading";
 import { StyledTableRow, StyledTableCell } from "./Table.style";
 
@@ -67,7 +66,7 @@ export const PokemonsTable = ({
                         #{id}
                       </StyledTableCell>
                       <StyledTableCell component="th" scope="row">
-                        {toNormalCase(name)}
+                        {name}
                       </StyledTableCell>
                       <StyledTableCell>
                         <img width={50} src={getPokemonImage(sprites)} />

@@ -5,9 +5,6 @@ import {
   TableHead,
   TableBody,
 } from "@mui/material";
-import { Pokemon } from "../types/pokemon";
-import { getPokemonImage } from "../utils/image";
-import { toNormalCase } from "../utils/string";
 import { StyledTableRow, StyledTableCell } from "./Table.style";
 
 export const ModalPokemonTable = () => {
@@ -28,7 +25,7 @@ export const ModalPokemonTable = () => {
                       #{id}
                     </StyledTableCell>
                     <StyledTableCell component="th" scope="row">
-                      {toNormalCase(name)}
+                      {(name)}
                     </StyledTableCell>
                     <StyledTableCell>
                       <img width={50} src={getPokemonImage(sprites)} />
