@@ -37,7 +37,7 @@ export const PokemonsTable = ({
       setOffset(offset + LIMIT_PER_PAGE);
       fetchNextPage();
     }
-  }, [inView, offset, fetchNextPage]);
+  }, [inView]);
   return error ? (
     <div>Aconteceu algo errado...</div>
   ) : isLoading ? (
