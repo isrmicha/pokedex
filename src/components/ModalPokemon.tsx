@@ -25,8 +25,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import { Pokemon } from "../types/pokemon";
-import { padding } from "@mui/system";
 import { StyledTableRow, StyledTableCell } from "./Table.style";
+import Image from "next/image";
 
 let audio: HTMLAudioElement | null = null;
 
@@ -117,7 +117,10 @@ export const ModalPokemon = ({
                       alignContent={"center"}
                       display={"flex"}
                     >
-                      <img src={getPokemonImage(pokemon.sprites)} />
+                      <Image
+                        src={getPokemonImage(pokemon.sprites)}
+                        alt="pokemon"
+                      />
                     </Grid>
 
                     <Grid
@@ -176,7 +179,7 @@ export const ModalPokemon = ({
                         <Stack direction="row" spacing={1}>
                           {(pokemon as Pokemon)?.types.map(
                             ({ type: { name } }) => (
-                              <Chip label={name} color="default" />
+                              <Chip key={name} label={name} color="default" />
                             )
                           )}
                         </Stack>
@@ -192,7 +195,7 @@ export const ModalPokemon = ({
                     </StyledTableRow>
                     {(pokemon as Pokemon)?.stats.map(
                       ({ base_stat, statName: { name } }) => (
-                        <StyledTableRow>
+                        <StyledTableRow key={name}>
                           <StyledTableCell component="th" scope="row">
                             {name}
                           </StyledTableCell>

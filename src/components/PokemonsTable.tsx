@@ -8,6 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { LIMIT_PER_PAGE, POKEMONS_QUERY_KEY } from "../constants/query";
@@ -36,7 +37,7 @@ export const PokemonsTable = ({
       setOffset(offset + LIMIT_PER_PAGE);
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, offset, fetchNextPage]);
   return error ? (
     <div>Aconteceu algo errado...</div>
   ) : isLoading ? (
@@ -69,12 +70,16 @@ export const PokemonsTable = ({
                         {name}
                       </StyledTableCell>
                       <StyledTableCell>
-                        <img width={50} src={getPokemonImage(sprites)} />
+                        <Image
+                          width={50}
+                          src={getPokemonImage(sprites)}
+                          alt="pokemon"
+                        />
                       </StyledTableCell>
                       <StyledTableCell>
                         <Stack direction="row" spacing={1}>
                           {types.map(({ type: { name } }) => (
-                            <Chip label={name} color="default" />
+                            <Chip key={name} label={name} color="default" />
                           ))}
                         </Stack>
                       </StyledTableCell>
