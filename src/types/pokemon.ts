@@ -3,4 +3,5 @@ export type Pokemon = {
   name: string;
   sprites: { sprite: string }[];
   types: { type: { name: string } }[];
+  stats: { base_stat: number; statName: { name: string } }[];
 };

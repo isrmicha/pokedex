@@ -49,6 +49,7 @@ export const ModalPokemon = ({
     audio.play();
   };
   const handleClose = () => setSelectedPokemonId(null);
+  console.log(pokemon);
   return (
     <Dialog open={true} onClose={handleClose}>
       <AppBar sx={{ position: "relative" }}>
@@ -140,7 +141,10 @@ export const ModalPokemon = ({
               </Grid>
             </Paper>
 
-            <TableContainer component={Paper}>
+            <TableContainer
+              component={Paper}
+              sx={{ maxHeight: "300px", overflow: "auto" }}
+            >
               <Table>
                 <TableHead>
                   <StyledTableRow>
@@ -178,6 +182,26 @@ export const ModalPokemon = ({
                         </Stack>
                       </StyledTableCell>
                     </StyledTableRow>
+                    <StyledTableRow>
+                      <StyledTableCell component="th" scope="row">
+                        Height
+                      </StyledTableCell>
+                      <StyledTableCell component="th" scope="row">
+                        {pokemon?.height}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                    {(pokemon as Pokemon)?.stats.map(
+                      ({ base_stat, statName: { name } }) => (
+                        <StyledTableRow>
+                          <StyledTableCell component="th" scope="row">
+                            {name}
+                          </StyledTableCell>
+                          <StyledTableCell component="th" scope="row">
+                            {base_stat}
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      )
+                    )}
                   </>
                 </TableBody>
               </Table>

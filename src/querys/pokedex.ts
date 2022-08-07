@@ -37,6 +37,13 @@ export const usePokemonQuery = (id: number) => {
           sprites: pokemon_v2_pokemonsprites {
             sprites
           }
+          height
+          stats: pokemon_v2_pokemonstats{
+            base_stat
+            statName : pokemon_v2_stat{
+              name
+            }
+          }
           types: pokemon_v2_pokemontypes{
             type: pokemon_v2_type {
               name
