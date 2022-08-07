@@ -71,9 +71,10 @@ export const PokemonsTable = ({
                       </StyledTableCell>
                       <StyledTableCell>
                         <Image
-                          width={50}
                           src={getPokemonImage(sprites)}
                           alt="pokemon"
+                          width={50}
+                          height={50}
                         />
                       </StyledTableCell>
                       <StyledTableCell>

@@ -49,12 +49,13 @@ export const ModalPokemon = ({
     audio.play();
   };
   const handleClose = () => setSelectedPokemonId(null);
-  console.log(pokemon);
   return (
     <Dialog open={true} onClose={handleClose}>
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
-          {isLoading ? (
+          {error ? (
+            <div>Aconteceu algo errado...</div>
+          ) : isLoading ? (
             <div>Loading...</div>
           ) : (
             <>
@@ -120,6 +121,8 @@ export const ModalPokemon = ({
                       <Image
                         src={getPokemonImage(pokemon.sprites)}
                         alt="pokemon"
+                        width={50}
+                        height={50}
                       />
                     </Grid>
 
