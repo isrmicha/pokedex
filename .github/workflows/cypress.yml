@@ -9,6 +9,5 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          start: |
-          yarn
-          yarn dev
+          start: yarn dev
+          env: port=3000
