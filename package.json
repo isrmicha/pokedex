@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "cypress": "^10.4.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"
