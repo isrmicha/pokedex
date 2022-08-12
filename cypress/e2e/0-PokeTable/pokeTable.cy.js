@@ -40,7 +40,7 @@ describe("pokemon table", () => {
     cy.get("table tr").should("have.length", 41);
   });
   it("displays 60 pokemons when infiniteScroll", () => {
-    cy.get("div[cy-id='pokeTable").scrollTo("bottom");
+    cy.get("div[data-cy='pokeTable").scrollTo("bottom");
     cy.get("table tr").should("have.length", 61);
   });
 });
