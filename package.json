@@ -18,7 +18,9 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "latest",
     "@stitches/react": "^1.2.8",
-    "@tanstack/react-query": "^4.0.10",
+    "@tanstack/query-sync-storage-persister": "^4.2.1",
+    "@tanstack/react-query": "^4.2.1",
+    "@tanstack/react-query-persist-client": "^4.2.1",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
     "next": "latest",
@@ -29,7 +31,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
-    "cypress": "^10.4.0",
+    "cypress": "10.6.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "typescript": "latest"

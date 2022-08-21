@@ -43,7 +43,11 @@ export const PokemonsTable = ({
   ) : isLoading ? (
     <Loading />
   ) : (
-    <TableContainer component={Paper} data-cy="pokeTable">
+    <TableContainer
+      component={Paper}
+      data-cy="pokeTable"
+      sx={{ maxHeight: 800 }}
+    >
       <Table>
         <TableHead>
           <StyledTableRow>
