@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
-import { usePokemonQuery } from "../querys/pokedex";
+import { usePokemonGetQuery, usePokemonQuery } from "../querys/pokedex";
 import { getPokemonImage } from "../utils/image";
 import { Loading } from "./Loading";
 import CloseIcon from "@mui/icons-material/Close";
@@ -37,12 +37,10 @@ export const ModalPokemon = ({
   selectedPokemonId: number;
   setSelectedPokemonId: Dispatch<SetStateAction<null | number>>;
 }) => {
-  const {
-    isLoading,
-    error,
-    data: pokemon,
-  } = usePokemonQuery(selectedPokemonId);
-
+  const { isLoading, error, data } = usePokemonGetQuery({
+    id: selectedPokemonId,
+  });
+  const pokemon = data?.[0];
   const handlePlayCry = () => {
     audio?.pause();
     audio = new Audio(`${POKEMON_CRY_URL}${selectedPokemonId}.mp3`);

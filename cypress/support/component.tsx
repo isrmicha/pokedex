@@ -36,9 +36,13 @@ declare global {
 
 Cypress.Commands.add("mount", mount);
 
-// Example use:
-// cy.mount(<MyComponent />)
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export const withQueryProvider = (Component: any) => (
   <QueryClientProvider client={queryClient}>

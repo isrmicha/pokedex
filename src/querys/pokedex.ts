@@ -1,58 +1,76 @@
-import { useQuery } from "@tanstack/react-query";
-import { POKEAPI_ENDPOINT, POKEMON_QUERY_KEY } from "../constants/query";
-import { request, gql } from "graphql-request";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { fetcher } from "../services/fetcher";
 
-export const getPokemonsQuery = async ({ pageParam = 0 }) => {
-  const { pokemon_v2_pokemon } = await request(
-    POKEAPI_ENDPOINT,
-    gql`
-      query {
-        pokemon_v2_pokemon(limit: 20, offset: ${pageParam}) {
-          id
-          name
-          sprites: pokemon_v2_pokemonsprites {
-            sprites
-          }
-          types: pokemon_v2_pokemontypes{
-            type: pokemon_v2_type {
-              name
-            }
-          }
-        }
+const GetPokemonDocument = `
+query getPokemon($id: Int) {
+  data: pokemon_v2_pokemon(where: {id: {_eq: $id}}) {
+    id
+    name
+    sprites: pokemon_v2_pokemonsprites {
+      sprites
+    }
+    height
+    stats: pokemon_v2_pokemonstats{
+      base_stat
+      statName : pokemon_v2_stat{
+        name
       }
-    `
+    }
+    types: pokemon_v2_pokemontypes{
+      type: pokemon_v2_type {
+        name
+      }
+    }
+  }
+}
+   `;
+
+export const usePokemonGetQuery = (variables?: any, options?: any) =>
+  useQuery(
+    ["getPokemon", variables],
+    (metaData) =>
+      fetcher(GetPokemonDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
   );
-  return pokemon_v2_pokemon;
-};
 
-export const usePokemonQuery = (id: number) => {
-  return useQuery([POKEMON_QUERY_KEY, id], async () => {
-    const { pokemon_v2_pokemon } = await request(
-      POKEAPI_ENDPOINT,
-      gql`
-      query {
-        pokemon_v2_pokemon(where: {id: {_eq: ${id}}}) {
-          id
-          name
-          sprites: pokemon_v2_pokemonsprites {
-            sprites
-          }
-          height
-          stats: pokemon_v2_pokemonstats{
-            base_stat
-            statName : pokemon_v2_stat{
-              name
-            }
-          }
-          types: pokemon_v2_pokemontypes{
-            type: pokemon_v2_type {
-              name
-            }
-          }
-        }
+const ListPokemonsQuery = `
+query listPokemons($limit: Int, $offset: Int) {
+  items: pokemon_v2_pokemon(limit: $limit, offset: $offset) {
+    id
+    name
+    sprites: pokemon_v2_pokemonsprites {
+      sprites
+    }
+    height
+    stats: pokemon_v2_pokemonstats{
+      base_stat
+      statName : pokemon_v2_stat{
+        name
       }
-      `
-    );
-    return pokemon_v2_pokemon?.[0];
-  });
-};
+    }
+    types: pokemon_v2_pokemontypes{
+      type: pokemon_v2_type {
+        name
+      }
+    }
+  }
+}
+`;
+
+export const useInfinitePokemonsListQuery = (
+  _pageParamKey: keyof any,
+  variables?: any,
+  options?: any
+) =>
+  useInfiniteQuery(
+    ["getPokemons", variables],
+    (metaData) =>
+      fetcher(ListPokemonsQuery, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
+  );

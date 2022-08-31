@@ -10,7 +10,7 @@ const Home = dynamic(() => import("../src/components/Home"), {
 
 const HomePage: NextPage = () => {
   return (
-    <Container maxWidth="lg" disableGutters>
+    <Container maxWidth="md" disableGutters>
       <Head>
         <title>Pokedex</title>
         <link rel="shortcut icon" href="/favicon.ico" />
