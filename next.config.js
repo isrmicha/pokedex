@@ -4,4 +4,7 @@ module.exports = {
     formats: ["image/avif", "image/webp"],
     domains: ["raw.githubusercontent.com"],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };

@@ -3,6 +3,7 @@ import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import InfiniteLoader from "react-window-infinite-loader";
 import {
+  GetNextPageParamFunction,
   QueryKey,
   UseInfiniteQueryOptions,
   UseInfiniteQueryResult,
@@ -31,9 +32,16 @@ export const InfiniteScrollListVirtualized = ({
   height,
   controllerQuery,
   controllerQueryParams,
-  itemSize,
+  itemSize = 50,
   ...props
-}: InfiniteScrollProps) => {
+}: {
+  itemComponent: React.FC<any>;
+  id?: string;
+  height?: number | string;
+  controllerQuery?: any;
+  controllerQueryParams?: Record<string, any>;
+  itemSize: number;
+}) => {
   const { data, fetchNextPage, isFetching, isLoading } = controllerQuery(
     "offset",
     { ...controllerQueryParams, limit: LIMIT_PER_PAGE },
@@ -66,7 +74,7 @@ export const InfiniteScrollListVirtualized = ({
                 height={height}
                 width={width}
                 itemCount={allDataItems?.length}
-                itemSize={itemSize || 52}
+                itemSize={itemSize}
                 onItemsRendered={onItemsRendered}
                 ref={ref}
               >

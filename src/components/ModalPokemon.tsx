@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { POKEMON_CRY_URL } from "../constants/pokemon";
-import { usePokemonGetQuery, usePokemonQuery } from "../querys/pokedex";
+import { usePokemonGetQuery } from "../querys/pokemon";
 import { getPokemonImage } from "../utils/image";
 import { Loading } from "./Loading";
 import CloseIcon from "@mui/icons-material/Close";

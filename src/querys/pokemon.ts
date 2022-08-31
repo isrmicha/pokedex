@@ -25,7 +25,10 @@ query getPokemon($id: Int) {
 }
    `;
 
-export const usePokemonGetQuery = (variables?: any, options?: any) =>
+export const usePokemonGetQuery = (
+  variables?: Record<string, any>,
+  options?: Record<string, any>
+) =>
   useQuery(
     ["getPokemon", variables],
     (metaData) =>
@@ -60,10 +63,10 @@ query listPokemons($limit: Int, $offset: Int) {
 }
 `;
 
-export const useInfinitePokemonsListQuery = (
-  _pageParamKey: keyof any,
-  variables?: any,
-  options?: any
+export const useInfinitePokemonsListQuery = <TData = unknown, TError = unknown>(
+  _pageParamKey: "offset",
+  variables?: Record<string, any>,
+  options?: Record<string, any>
 ) =>
   useInfiniteQuery(
     ["getPokemons", variables],

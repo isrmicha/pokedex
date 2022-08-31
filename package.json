@@ -31,6 +31,9 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
+    "@types/react-window-infinite-loader": "^1.0.6",
     "cypress": "10.6.0",
     "eslint": "latest",
     "eslint-config-next": "latest",
