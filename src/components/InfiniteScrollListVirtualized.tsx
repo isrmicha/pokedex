@@ -10,6 +10,8 @@ import {
 } from "@tanstack/react-query";
 import { TOTAL_POKEMON_COUNT } from "../constants/pokemon";
 import { Loading } from "./Loading";
+import { useMediaQuery } from "@mui/material";
+import { IS_MOBILE_MEDIA_QUERY } from "../constants/media-query";
 
 const LIMIT_PER_PAGE = 20;
 
@@ -42,6 +44,8 @@ export const InfiniteScrollListVirtualized = ({
   controllerQueryParams?: Record<string, any>;
   itemSize: number;
 }) => {
+  const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
+
   const { data, fetchNextPage, isFetching, isLoading } = controllerQuery(
     "offset",
     { ...controllerQueryParams, limit: LIMIT_PER_PAGE },
@@ -60,7 +64,7 @@ export const InfiniteScrollListVirtualized = ({
   );
   if (isLoading) return <Loading />;
   return (
-    <div style={{ height: 600 }}>
+    <div style={{ height: isMobile ? window.innerHeight : 800 }}>
       <AutoSizer>
         {({ height, width }) => (
           <InfiniteLoader
