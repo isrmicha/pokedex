@@ -120,7 +120,7 @@ export const ModalPokemon = ({
                         src={getPokemonImage(pokemon.sprites)}
                         alt="pokemon"
                         width={200}
-                        height={150}
+                        height={200}
                       />
                     </Grid>
 

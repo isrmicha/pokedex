@@ -24,7 +24,7 @@ export const PokemonsTable = ({
   const isMobile = useMediaQuery(IS_MOBILE_MEDIA_QUERY);
 
   return (
-    <Container sx={{ paddingTop: isMobile ? 0 : 10 }}>
+    <Container sx={{ paddingTop: isMobile ? 0 : 5 }}>
       <StyledGrid container alignItems="center">
         <Grid xs={2}>Number</Grid>
         <Grid xs={3}>Nome</Grid>
