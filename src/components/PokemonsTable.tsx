@@ -26,10 +26,10 @@ export const PokemonsTable = ({
   return (
     <Container sx={{ paddingTop: isMobile ? 0 : 5 }}>
       <StyledGrid container alignItems="center">
-        <Grid xs={2}>Number</Grid>
-        <Grid xs={3}>Nome</Grid>
+        <Grid xs={2}>ID</Grid>
+        <Grid xs={3}>Name</Grid>
         <Grid xs={isMobile ? 2 : 4}>
-          <Typography>Image</Typography>
+          <Typography>Sprite</Typography>
         </Grid>
         <Grid xs={3}>
           <Typography>Types</Typography>
@@ -65,7 +65,11 @@ const PokemonRow = ({
 
   return (
     <>
-      <Paper elevation={2} onClick={() => setSelectedPokemonId(id)}>
+      <Paper
+        elevation={2}
+        onClick={() => setSelectedPokemonId(id)}
+        className="ListItem"
+      >
         <Grid container alignItems="center">
           <StyledGridItem xs={2} key={id}>
             #{id}
