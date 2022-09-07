@@ -10,10 +10,7 @@ describe("pokemon table", () => {
   it("displays table when get payload from pokeapi", () => {
     cy.get(".List").should("exist");
   });
-  it("should have 20 pokemons on table", () => {
-    cy.get(".ListItem").should("have.length", 17);
-    cy.contains("#10").should("be.visible");
-  });
+
   it("displays table header", () => {
     cy.contains("ID").should("exist");
     cy.contains("Name").should("exist");
@@ -36,14 +33,12 @@ describe("pokemon table", () => {
     cy.contains("grass").should("exist");
     cy.contains("poison").should("exist");
   });
-  it("displays 40 pokemons when infiniteScroll", () => {
+  it("should have 10 pokemons on table", () => {
+    cy.contains("#10").should("be.visible");
+  });
+  it("displays 20 pokemons when infiniteScroll", () => {
     cy.get(".List").scrollTo("bottom");
     cy.get(".ListItem").should("have.length", 19);
     cy.contains("#20").should("be.visible");
-  });
-  it("displays 60 pokemons when infiniteScroll", () => {
-    cy.get(".List").scrollTo("bottom");
-    cy.get(".ListItem").should("have.length", 19);
-    cy.contains("#60").should("be.visible");
   });
 });
