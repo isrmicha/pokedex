@@ -104,4 +104,5 @@ const StyledGrid = styled(Grid, {
 
 const StyledGridItem = styled(Grid, {
   paddingLeft: "10px",
+  textTransform: "capitalize",
 });
