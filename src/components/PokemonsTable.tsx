@@ -68,6 +68,7 @@ const PokemonRow = ({
       <Paper
         elevation={2}
         onClick={() => setSelectedPokemonId(id)}
+        style={{ cursor: "pointer" }}
         className="ListItem"
       >
         <Grid container alignItems="center">
