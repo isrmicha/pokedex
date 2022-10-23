@@ -39,7 +39,7 @@ export const usePokemonGetQuery = (
     options
   );
 
-const ListPokemonsQuery = `
+export const ListPokemonsQuery = `
 query listPokemons($limit: Int, $offset: Int) {
   items: pokemon_v2_pokemon(limit: $limit, offset: $offset) {
     id

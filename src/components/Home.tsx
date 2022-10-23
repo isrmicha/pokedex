@@ -2,14 +2,17 @@ import { useState } from "react";
 import { PokemonsTable } from "./PokemonsTable";
 import { ModalPokemon } from "./ModalPokemon";
 
-const Home = () => {
+const Home = ({ initialPokemons }) => {
   const [selectedPokemonId, setSelectedPokemonId] = useState<null | number>(
     null
   );
 
   return (
     <>
-      <PokemonsTable setSelectedPokemonId={setSelectedPokemonId} />
+      <PokemonsTable
+        setSelectedPokemonId={setSelectedPokemonId}
+        initialPokemons={initialPokemons}
+      />
       {selectedPokemonId && (
         <ModalPokemon
           selectedPokemonId={selectedPokemonId}

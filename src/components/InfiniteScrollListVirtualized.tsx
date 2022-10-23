@@ -35,6 +35,7 @@ export const InfiniteScrollListVirtualized = ({
   controllerQuery,
   controllerQueryParams,
   itemSize = 50,
+  initialData,
   ...props
 }: {
   itemComponent: React.FC<any>;
@@ -55,6 +56,7 @@ export const InfiniteScrollListVirtualized = ({
           offset: lastPage.items[lastPage.items.length - 1].id + LIMIT_PER_PAGE,
         };
       },
+      initialData,
     }
   );
 

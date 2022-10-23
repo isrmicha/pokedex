@@ -9,15 +9,20 @@ import {
 import { Container } from "@mui/system";
 import { styled } from "@stitches/react";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { IS_MOBILE_MEDIA_QUERY } from "../constants/media-query";
-import { useInfinitePokemonsListQuery } from "../querys/pokemon";
+import {
+  ListPokemonsQuery,
+  useInfinitePokemonsListQuery,
+} from "../querys/pokemon";
+import { fetcher } from "../services/fetcher";
 import theme from "../theme";
 import { getPokemonImage } from "../utils/image";
 import { InfiniteScrollListVirtualized } from "./InfiniteScrollListVirtualized";
 
 export const PokemonsTable = ({
   setSelectedPokemonId,
+  initialPokemons,
 }: {
   setSelectedPokemonId: Dispatch<SetStateAction<null | number>>;
 }) => {
@@ -41,6 +46,7 @@ export const PokemonsTable = ({
         itemComponent={PokemonRow}
         setSelectedPokemonId={setSelectedPokemonId}
         itemSize={56}
+        initialData={initialPokemons}
       />
     </Container>
   );
