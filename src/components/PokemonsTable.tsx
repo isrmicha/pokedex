@@ -88,6 +88,7 @@ const PokemonRow = ({
               alt="pokemon"
               width={50}
               height={50}
+              unoptimized
             />
           </Grid>
           <Grid xs={3}>

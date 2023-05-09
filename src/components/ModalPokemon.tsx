@@ -121,6 +121,7 @@ export const ModalPokemon = ({
                         alt="pokemon"
                         width={200}
                         height={200}
+                        unoptimized
                       />
                     </Grid>
 
