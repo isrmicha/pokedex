@@ -24,7 +24,6 @@ export const exampleRouter = createTRPCRouter({
   }),
   updateFavorite: publicProcedure.input(z.object({ id: z.string(), index: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      console.log(123123123132, input)
       const { id, index } = input
       const { ids } = await ctx.prisma.favorites.findUnique({ where: { id } })
       return ctx.prisma.favorites.upsert({
