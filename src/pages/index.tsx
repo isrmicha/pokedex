@@ -6,6 +6,7 @@ import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
 import { Breadcrumb, Layout, Menu, theme, } from 'antd'
 import { useEffect, } from "react"
+import { useMedia, } from "react-use"
 
 const { Header, Content, Footer, } = Layout
 const Home: NextPage = () => {
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
   } = theme.useToken()
   const { data: sessionData, status, } = useSession()
   useEffect(()=>{if(status === 'unauthenticated') signIn()},[status,])
+  const isMobile = useMedia('(max-width: 480px)')
   return (
     <>
       <Head>
@@ -45,7 +47,7 @@ const Home: NextPage = () => {
             </Row>
         </Header>
         {sessionData && (
-        <Content style={{ padding: '0 50px', }}>
+        <Content style={{ padding: isMobile? '0': '0 50px', }}>
           <Breadcrumb style={{ margin: '16px 0', }} 
           items={[
             {

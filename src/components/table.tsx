@@ -53,12 +53,14 @@ export const Table: React.FC = () => {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
+            ellipsis: true,
             render: (_, record) => <Tag>#{record?.id}</Tag>,
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            ellipsis: true,
             render: (text) => <Tag>
                 {startCase(text)}
             </Tag>,
@@ -67,6 +69,7 @@ export const Table: React.FC = () => {
             title: 'Image',
             key: 'sprites',
             dataIndex: 'sprites',
+            ellipsis: true,
             render: (_, record) => (
                 <Image alt={record.name} src={getPokemonImage(record.id)} width={50} height={50}
                     onError={event => handleOnErrorImage(record.id, event, record.sprites)}
@@ -81,6 +84,7 @@ export const Table: React.FC = () => {
             title: 'Favorite',
             key: 'action',
             dataIndex: 'action',
+            ellipsis: true,
             render: (_, record) => (
                 <Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(record?.id)}>
                     <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
@@ -100,6 +104,7 @@ export const Table: React.FC = () => {
         columns={columns} dataSource={pokemons?.pages?.[0]?.items}
         showHeader={false}
         rowKey="id"
+        
     />
 }
 
