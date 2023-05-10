@@ -1,5 +1,5 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { fetcher } from "../services/fetcher";
+import { useInfiniteQuery, useQuery, } from "@tanstack/react-query"
+import { fetcher, } from "../services/fetcher"
 
 const GetPokemonDocument = `
 query getPokemon($id: Int) {
@@ -23,21 +23,21 @@ query getPokemon($id: Int) {
     }
   }
 }
-   `;
+   `
 
 export const usePokemonGetQuery = (
     variables?: Record<string, any>,
     options?: Record<string, any>
 ) =>
     useQuery(
-        ["getPokemon", variables],
+        ["getPokemon", variables,],
         (metaData) =>
             fetcher(GetPokemonDocument, {
                 ...variables,
                 ...(metaData.pageParam ?? {}),
             })(),
         options
-    );
+    )
 
 export const ListPokemonsQuery = `
 query listPokemons($limit: Int, $offset: Int) {
@@ -61,7 +61,7 @@ query listPokemons($limit: Int, $offset: Int) {
     }
   }
 }
-`;
+`
 
 export const useInfinitePokemonsListQuery = <TData = unknown, TError = unknown>(
     _pageParamKey: "offset",
@@ -69,11 +69,11 @@ export const useInfinitePokemonsListQuery = <TData = unknown, TError = unknown>(
     options?: Record<string, any>
 ) =>
     useInfiniteQuery(
-        ["getPokemons", variables],
+        ["getPokemons", variables,],
         (metaData) =>
             fetcher(ListPokemonsQuery, {
                 ...variables,
                 ...(metaData.pageParam ?? {}),
             })(),
         options
-    );
+    )

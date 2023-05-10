@@ -1,11 +1,11 @@
-import { type NextPage } from "next";
-import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Avatar, Button, Col, Row, Space, Tag, } from 'antd';
-import { Table } from "~/components/table";
+import { type NextPage, } from "next"
+import Head from "next/head"
+import { signIn, signOut, useSession, } from "next-auth/react"
+import { Avatar, Button, Col, Row, Space, Tag, } from 'antd'
+import { Table, } from "~/components/table"
 
 const Home: NextPage = () => {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, } = useSession()
 
   return (
     <>
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
                   <>
                     <Row justify={"end"}>
                       <Col>
-                        <Space size={[12, 12]} wrap>
+                        <Space size={[12, 12,]} wrap>
                           <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                           <Tag>{sessionData.user?.name}</Tag>
                           <Button type="primary" onClick={signOut}>
@@ -38,7 +38,7 @@ const Home: NextPage = () => {
                   : (
                     <Row justify={"end"}>
                       <Col>
-                        <Space size={[12, 12]} wrap>
+                        <Space size={[12, 12,]} wrap>
                           <Button type="primary" onClick={signIn}>
                             {sessionData ? "Sign out" : "Sign in"}
                           </Button>
@@ -56,8 +56,8 @@ const Home: NextPage = () => {
         </div>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 

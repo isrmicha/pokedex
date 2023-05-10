@@ -1,4 +1,4 @@
-import { POKEAPI_ENDPOINT } from "~/constants";
+import { POKEAPI_ENDPOINT, } from "~/constants"
 
 export function fetcher<TData, TVariables>(
     query: string,
@@ -7,17 +7,17 @@ export function fetcher<TData, TVariables>(
     return async (): Promise<TData> => {
         const res = await fetch(POKEAPI_ENDPOINT, {
             method: "POST",
-            body: JSON.stringify({ query, variables }),
-        });
+            body: JSON.stringify({ query, variables, }),
+        })
 
-        const json = await res.json();
+        const json = await res.json()
 
         if (json.errors) {
-            const { message } = json.errors[0];
+            const { message, } = json.errors[0]
 
-            throw new Error(message);
+            throw new Error(message)
         }
 
-        return json?.data?.data || json?.data;
-    };
+        return json?.data?.data || json?.data
+    }
 }
