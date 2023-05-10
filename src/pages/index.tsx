@@ -5,6 +5,7 @@ import { Avatar, Button, Col, Row, Space, Tag, } from 'antd'
 import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
 import { Breadcrumb, Layout, Menu, theme, } from 'antd'
+import { useEffect, } from "react"
 
 const { Header, Content, Footer, } = Layout
 const Home: NextPage = () => {
@@ -12,6 +13,8 @@ const Home: NextPage = () => {
     token: { colorBgContainer, },
   } = theme.useToken()
   const { data: sessionData, status, } = useSession()
+  console.log(status)
+  useEffect(()=>{if(status === 'unauthenticated') signIn()},[status,])
   return (
     <>
       <Head>
@@ -42,15 +45,17 @@ const Home: NextPage = () => {
               </Col>
             </Row>
         </Header>
+        {sessionData && (
         <Content style={{ padding: '0 50px', }}>
           <Breadcrumb style={{ margin: '16px 0', }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
           </Breadcrumb>
           <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-            {sessionData && (<Table />)}
+           <Table />
           </div>
         </Content>
+        )}
         <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
           @isrmicha
         </a>
