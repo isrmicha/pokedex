@@ -15,8 +15,9 @@ export const Table: React.FC = () => {
     const pokemons = api.example.getPokemons.useQuery({ offset: 0 }, {
         ...(favoritedIds?.data ? {
             select(data) {
-                data.items.results = data.items.results.map(item => {
-                    item.isFavorite = favoritedIds?.data?.names?.includes(item.name)
+                data.items.results = data.items.results.map((item, index) => {
+                    item.index = index
+                    item.isFavorite = favoritedIds?.data?.ids?.includes(`${index}`)
                     return item
                 })
                 return data
@@ -24,8 +25,8 @@ export const Table: React.FC = () => {
         } : {}),
     })
     const isLoading = favoritedIds.isFetching || pokemons.isFetching || updateFavorites.isLoading
-    const handleClickFavorite = async (pokemonName) => {
-        await updateFavorites.mutateAsync({ id: data?.user.id, pokemonName })
+    const handleClickFavorite = async (index) => {
+        await updateFavorites.mutateAsync({ id: data?.user.id, index: `${index}` })
         await favoritedIds.refetch()
     }
     const columns: ColumnsType<DataType> = [
@@ -43,10 +44,12 @@ export const Table: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
-                <Space size="middle" style={{ cursor: 'pointer' }} onClick={() => handleClickFavorite(record?.name)}>
+            render: (index, record) => (
+
+                <Space size="middle" style={{ cursor: 'pointer' }} onClick={() => handleClickFavorite(record?.index)}>
                     <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
                 </Space>
+
             ),
         }
 

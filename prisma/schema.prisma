@@ -68,6 +68,6 @@ model VerificationToken {
 }
 
 model favorites {
-    id    String   @id @unique
-    names String[]
+    id  String   @id @unique
+    ids String[]
 }

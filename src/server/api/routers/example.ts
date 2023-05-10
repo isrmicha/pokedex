@@ -22,21 +22,21 @@ export const exampleRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
-  updateFavorite: publicProcedure.input(z.object({ id: z.string(), pokemonName: z.string() }))
+  updateFavorite: publicProcedure.input(z.object({ id: z.string(), index: z.string() }))
     .mutation(async ({ ctx, input }) => {
       console.log(123123123132, input)
-      const { id, pokemonName } = input
-      const { names } = await ctx.prisma.favorites.findUnique({ where: { id } })
+      const { id, index } = input
+      const { ids } = await ctx.prisma.favorites.findUnique({ where: { id } })
       return ctx.prisma.favorites.upsert({
         where: {
           id,
         },
         update: {
-          names: names.includes(pokemonName) ? names.filter(name => name !== pokemonName) : [...names, pokemonName],
+          ids: ids.includes(index) ? ids.filter(name => name !== index) : [...ids, index],
         },
         create: {
           id,
-          names: [pokemonName]
+          ids: [index]
         },
       })
     }),
