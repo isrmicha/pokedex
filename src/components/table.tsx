@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Table as _Table } from 'antd';
+import { Image, Space, Table as _Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { api } from '~/utils/api';
 import { PAGE_SIZE, TOTAL_POKEMON_COUNT } from '~/constants';
@@ -8,7 +8,6 @@ import {
 } from '@ant-design/icons';
 import { useSession } from 'next-auth/react';
 import { useInfinitePokemonsListQuery } from '~/services/pokedex';
-import Image from 'next/image';
 import { getPokemonImage } from '~/utils/image';
 
 export const Table: React.FC = () => {
@@ -44,6 +43,9 @@ export const Table: React.FC = () => {
         await favoritedIds.refetch()
     }
     const handleChangePage = page => setPage(page - 1)
+    const handleOnErrorImage = (id, event, sprites) => {
+        event.target.src = getPokemonImage(id, true, sprites)
+    }
     const columns: ColumnsType<DataType> = [
         {
             title: 'Id',
@@ -62,7 +64,13 @@ export const Table: React.FC = () => {
             key: 'sprites',
             dataIndex: 'sprites',
             render: (_, record) => (
-                <Image alt={record.name} src={getPokemonImage(record.sprites)} width={50} height={50} unoptimized />
+                <Image alt={record.name} src={getPokemonImage(record.id)} width={50} height={50}
+                    onError={event => handleOnErrorImage(record.id, event, record.sprites)}
+                    preview={{
+                        width: 250,
+                        height: 250
+                    }}
+                />
             ),
         },
         {
