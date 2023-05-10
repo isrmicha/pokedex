@@ -1,5 +1,5 @@
 import React, { useState, } from 'react'
-import { Image, Space, Table as _Table, } from 'antd'
+import { Image, Space, Tag, Table as _Table, } from 'antd'
 import type { ColumnsType, } from 'antd/es/table'
 import { api, } from '~/utils/api'
 import { PAGE_SIZE, TOTAL_POKEMON_COUNT, } from '~/constants'
@@ -9,6 +9,7 @@ import {
 import { useSession, } from 'next-auth/react'
 import { useInfinitePokemonsListQuery, } from '~/services/pokedex'
 import { getPokemonImage, } from '~/utils/image'
+import { startCase, } from 'lodash'
 
 export const Table: React.FC = () => {
     const [page, setPage,] = useState<number>(0)
@@ -51,13 +52,15 @@ export const Table: React.FC = () => {
             title: 'Id',
             dataIndex: 'id',
             key: 'id',
-            render: (_, record) => <a>#{record?.id}</a>,
+            render: (_, record) => <Tag>#{record?.id}</Tag>,
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a>{text}</a>,
+            render: (text) => <Tag>
+                {startCase(text)}
+            </Tag>,
         },
         {
             title: 'Image',

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const path = require("path");
+const path = require("path")
 
 /** @type {import("eslint").Linter.Config} */
 const config = {
@@ -8,7 +8,7 @@ const config = {
       extends: [
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
-      files: ["*.ts", "*.tsx"],
+      files: ["*.ts", "*.tsx",],
       parserOptions: {
         project: path.join(__dirname, "tsconfig.json"),
       },
@@ -18,8 +18,8 @@ const config = {
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
   },
-  plugins: ["@typescript-eslint"],
-  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  plugins: ["@typescript-eslint",],
+  extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended",],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
@@ -28,10 +28,10 @@ const config = {
         fixStyle: "inline-type-imports",
       },
     ],
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "comma-dangle": [1, "always"],
-    "semi": [2, "never"],
+    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", },],
+    "comma-dangle": [1, "always",],
+    "semi": [2, "never",],
   },
-};
+}
 
-module.exports = config;
+module.exports = config
