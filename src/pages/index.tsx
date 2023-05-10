@@ -51,7 +51,7 @@ const Home: NextPage = () => {
             {sessionData && (<Table />)}
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center', }}>Ant Design ©{new Date().getFullYear()} <a target="_blank" href="https://www.github.com/isrmicha">
+        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
           @isrmicha
         </a>
         </Footer>
