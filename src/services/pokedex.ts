@@ -26,18 +26,18 @@ query getPokemon($id: Int) {
    `
 
 export const usePokemonGetQuery = (
-    variables?: Record<string, any>,
-    options?: Record<string, any>
+  variables?: Record<string, any>,
+  options?: Record<string, any>
 ) =>
-    useQuery(
-        ["getPokemon", variables,],
-        (metaData) =>
-            fetcher(GetPokemonDocument, {
-                ...variables,
-                ...(metaData.pageParam ?? {}),
-            })(),
-        options
-    )
+  useQuery(
+    ["getPokemon", variables,],
+    (metaData) =>
+      fetcher(GetPokemonDocument, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
+  )
 
 export const ListPokemonsQuery = `
 query listPokemons($limit: Int, $offset: Int) {
@@ -62,18 +62,41 @@ query listPokemons($limit: Int, $offset: Int) {
   }
 }
 `
+export const ListPokemonsQueryByIds = `
+query listPokemons($ids: [Int]) {
+  items: pokemon_v2_pokemon(where: {id: {_in: $ids}}) {
+    id
+    name
+    sprites: pokemon_v2_pokemonsprites {
+      sprites
+    }
+    height
+    stats: pokemon_v2_pokemonstats{
+      base_stat
+      statName : pokemon_v2_stat{
+        name
+      }
+    }
+    types: pokemon_v2_pokemontypes{
+      type: pokemon_v2_type {
+        name
+      }
+    }
+  }
+}
+`
 
 export const useInfinitePokemonsListQuery = <TData = unknown, TError = unknown>(
-    _pageParamKey: "offset",
-    variables?: Record<string, any>,
-    options?: Record<string, any>
+  _pageParamKey: "offset",
+  variables?: Record<string, any>,
+  options?: Record<string, any>
 ) =>
-    useInfiniteQuery(
-        ["getPokemons", variables,],
-        (metaData) =>
-            fetcher(ListPokemonsQuery, {
-                ...variables,
-                ...(metaData.pageParam ?? {}),
-            })(),
-        options
-    )
+  useInfiniteQuery(
+    ["getPokemons", variables,],
+    (metaData) =>
+      fetcher(variables?.ids ? ListPokemonsQueryByIds : ListPokemonsQuery, {
+        ...variables,
+        ...(metaData.pageParam ?? {}),
+      })(),
+    options
+  )
