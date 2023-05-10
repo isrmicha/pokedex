@@ -58,11 +58,15 @@ export const Table: React.FC = () => {
 
     ];
 
-    return <_Table bordered pagination={{
-        pageSize: PAGE_SIZE, current: page + 1,
-        onChange: handleChangePage,
-        total: pokemons.data?.items?.count
-    }} loading={isLoading}
+    return <_Table
+        bordered
+        pagination={{
+            pageSize: PAGE_SIZE, current: page + 1,
+            onChange: handleChangePage,
+            total: pokemons.data?.items?.count,
+            showSizeChanger: false
+
+        }} loading={isLoading}
         columns={columns} dataSource={pokemons?.data?.items?.results} />
 }
 
