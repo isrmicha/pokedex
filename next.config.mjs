@@ -16,6 +16,9 @@ const config = {
   },
   eslint: {
     ignoreDuringBuilds: true
+  },
+  images: {
+    domains: ["raw.githubusercontent.com"]
   }
 
   /**

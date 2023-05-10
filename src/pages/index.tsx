@@ -33,7 +33,7 @@ const Home: NextPage = () => {
               <Button type="primary" onClick={sessionData ? () => void signOut() : () => void signIn()}>
                 {sessionData ? "Sign out" : "Sign in"}
               </Button>
-              <Table />
+              {sessionData && (<Table />)}
             </div>
           </div>
         </div>

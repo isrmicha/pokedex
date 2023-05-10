@@ -22,16 +22,16 @@ export const exampleRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
-  updateFavorite: publicProcedure.input(z.object({ id: z.string(), index: z.string() }))
+  updateFavorite: publicProcedure.input(z.object({ id: z.string(), index: z.string(), favoritedIds: z.array(z.string()) }))
     .mutation(async ({ ctx, input }) => {
-      const { id, index } = input
-      const { ids } = await ctx.prisma.favorites.findUnique({ where: { id } })
+      const { id, index, favoritedIds } = input
+
       return ctx.prisma.favorites.upsert({
         where: {
           id,
         },
         update: {
-          ids: ids.includes(index) ? ids.filter(name => name !== index) : [...ids, index],
+          ids: favoritedIds.includes(index) ? favoritedIds.filter(name => name !== index) : [...favoritedIds, index],
         },
         create: {
           id,
@@ -43,7 +43,7 @@ export const exampleRouter = createTRPCRouter({
     .query
     (({ ctx, input }) => {
       const { id } = input
-      return ctx.prisma.favorites.findUnique({ where: { id: id } })
+      return ctx.prisma.favorites.findUnique({ where: { id } })
     }),
   getPokemons: publicProcedure
     .input(z.object({
@@ -52,9 +52,8 @@ export const exampleRouter = createTRPCRouter({
     }))
     .query(async (opts) => {
       const { input } = opts;
-      const limit = input.limit ?? 50;
-      const { offset } = input;
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}`)
+      const { offset, limit } = input;
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`)
       const items = await response.json()
       let nextOffset: typeof offset | undefined = undefined;
       if (items.length > limit) {
