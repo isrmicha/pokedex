@@ -67,8 +67,8 @@ export const Table: React.FC = () => {
                 <Image alt={record.name} src={getPokemonImage(record.id)} width={50} height={50}
                     onError={event => handleOnErrorImage(record.id, event, record.sprites)}
                     preview={{
-                        width: 250,
-                        height: 250
+                        width: 200,
+                        height: 200
                     }}
                 />
             ),
