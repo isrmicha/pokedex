@@ -28,7 +28,7 @@ export const Table: React.FC = () => {
             },
             ...(favoritedIds?.data ? {
                 select(data) {
-                    data?.pages?.[0].items = data?.pages?.[0].items.map((item) => {
+                    data.pages[0].items = data?.pages?.[0].items.map((item) => {
                         item.isFavorite = favoritedIds?.data?.ids?.includes(`${item.id}`)
                         return item
                     })
