@@ -13,7 +13,6 @@ const Home: NextPage = () => {
     token: { colorBgContainer, },
   } = theme.useToken()
   const { data: sessionData, status, } = useSession()
-  console.log(status)
   useEffect(()=>{if(status === 'unauthenticated') signIn()},[status,])
   return (
     <>
@@ -47,10 +46,16 @@ const Home: NextPage = () => {
         </Header>
         {sessionData && (
         <Content style={{ padding: '0 50px', }}>
-          <Breadcrumb style={{ margin: '16px 0', }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb style={{ margin: '16px 0', }} 
+          items={[
+            {
+              title: 'Home',
+            },
+            {
+              title: <a href="">List</a>,
+            },
+          ]}
+          />
           <div className="site-layout-content" style={{ background: colorBgContainer, }}>
            <Table />
           </div>

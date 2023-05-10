@@ -87,9 +87,7 @@ export const Table: React.FC = () => {
                 </Space>
             ),
         },
-
     ]
-
     return <_Table
         bordered
         pagination={{
@@ -101,7 +99,7 @@ export const Table: React.FC = () => {
         loading={{spinning: isLoading, indicator: <Loading />,}}
         columns={columns} dataSource={pokemons?.pages?.[0]?.items}
         showHeader={false}
-        
+        rowKey="id"
     />
 }
 
