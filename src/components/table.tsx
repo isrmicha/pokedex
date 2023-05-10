@@ -10,12 +10,13 @@ import { useSession, } from 'next-auth/react'
 import { useInfinitePokemonsListQuery, } from '~/services/pokedex'
 import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
+import { Loading, } from './loading'
 
 export const Table: React.FC = () => {
     const [page, setPage,] = useState<number>(0)
     const { data, } = useSession()
-    const favoritedIds = api.example.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
-    const updateFavorites = api.example.updateFavorite.useMutation()
+    const favoritedIds = api.router.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
+    const updateFavorites = api.router.updateFavorite.useMutation()
     const { data: pokemons, isFetching, } = useInfinitePokemonsListQuery(
         "offset",
         { offset: page * PAGE_SIZE, limit: PAGE_SIZE, },
@@ -97,9 +98,10 @@ export const Table: React.FC = () => {
             total: TOTAL_POKEMON_COUNT,
             showSizeChanger: false,
         }}
-        loading={isLoading}
+        loading={{spinning: isLoading, indicator: <Loading />,}}
         columns={columns} dataSource={pokemons?.pages?.[0]?.items}
         showHeader={false}
+        
     />
 }
 
