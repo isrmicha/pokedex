@@ -52,7 +52,7 @@ const Home: NextPage = () => {
           </Row>
         </Header>
         {sessionData && (
-          <Content style={{ padding: isMobile ? '0' : '0 50px', }}>
+          <Content style={{ padding: isMobile ? '0 5px' : '0 50px', }}>
             <Breadcrumb style={{ margin: '16px 0', }}
               items={[
                 {
