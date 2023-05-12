@@ -21,7 +21,7 @@ const Home: NextPage = () => {
   useEffect(() => { if (status === 'unauthenticated') signIn() }, [status,])
   const isMobile = useMedia('(max-width: 480px)')
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const favoritedIds = api.router.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
+  const favoritedIds = api.router.getFavorites.useQuery({ id: sessionData?.user.id, }, { enabled: !!sessionData?.user.id, })
 
   return (
 
