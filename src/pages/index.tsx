@@ -11,6 +11,7 @@ import { FavoriteDrawer, } from "~/components/favorite-drawer"
 import {
   HeartFilled,
 } from '@ant-design/icons'
+import { api, } from "~/utils/api"
 const { Header, Content, Footer, } = Layout
 const Home: NextPage = () => {
   const {
