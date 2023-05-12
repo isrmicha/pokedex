@@ -6,10 +6,7 @@ import { api, } from "~/utils/api"
 
 
 
-export const FavoriteDrawer = ({ onClose, open,}: any) => {
-    const { data, } = useSession()
-    const favoritedIds = api.router.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
-
+export const FavoriteDrawer = ({ onClose, open,favoritedIds,}: any) => {
     const { data: pokemons, isFetching, } = useInfinitePokemonsListQuery(
         "offset",
         { ids: favoritedIds?.data?.ids, }

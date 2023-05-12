@@ -1,7 +1,7 @@
 import { type NextPage, } from "next"
 import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
-import { Avatar, Button, Col, Drawer, Row, Space, Tag, } from 'antd'
+import { Avatar, Badge, Button, Col, Drawer, Row, Space, Tag, } from 'antd'
 import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
 import { Breadcrumb, Layout, Menu, theme, } from 'antd'
@@ -20,7 +20,10 @@ const Home: NextPage = () => {
   useEffect(() => { if (status === 'unauthenticated') signIn() }, [status,])
   const isMobile = useMedia('(max-width: 480px)')
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
+  const favoritedIds = api.router.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
+
   return (
+
     <>
       <Head>
         <title>Pokedex</title>
@@ -39,7 +42,9 @@ const Home: NextPage = () => {
                       <>
                         <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                         <Tag color="processing" >{sessionData.user?.name}</Tag>
-                        <Button type="undefined" shape="circle" icon={<HeartFilled style={{color: "red",}}   onClick={() => setIsOpenFavoriteDrawer(true)} />} />
+                        <Badge count={favoritedIds?.data?.ids?.length}>
+                          <Button type="undefined" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
+                        </Badge>
                       </>
                     )}
                     <Button type="primary" onClick={sessionData ? signOut : signIn}>
@@ -64,7 +69,7 @@ const Home: NextPage = () => {
               ]}
             />
             <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-              <Table />
+              <Table favoritedIds={favoritedIds} />
             </div>
           </Content>
         )}
@@ -73,8 +78,8 @@ const Home: NextPage = () => {
         </a>
         </Footer>
       </Layout>
-      <FavoriteDrawer open={isOpenFavoriteDrawer} onClose={() => setIsOpenFavoriteDrawer(false)} />
-     
+      <FavoriteDrawer open={isOpenFavoriteDrawer} onClose={() => setIsOpenFavoriteDrawer(false)} favoritedIds={favoritedIds} />
+
     </>
   )
 }

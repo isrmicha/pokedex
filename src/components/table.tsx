@@ -12,10 +12,8 @@ import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 
-export const Table: React.FC = () => {
+export const Table: React.FC = ({favoritedIds,}) => {
     const [page, setPage,] = useState<number>(0)
-    const { data, } = useSession()
-    const favoritedIds = api.router.getFavorites.useQuery({ id: data?.user.id, }, { enabled: !!data?.user.id, })
     const updateFavorites = api.router.updateFavorite.useMutation()
     const { data: pokemons, isFetching, } = useInfinitePokemonsListQuery(
         "offset",
