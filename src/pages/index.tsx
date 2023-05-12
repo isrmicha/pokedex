@@ -43,7 +43,7 @@ const Home: NextPage = () => {
                       <>
                         <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                         <Tag color="processing" >{sessionData.user?.name}</Tag>
-                        <Badge count={favoritedIds?.data?.ids?.length}>
+                        <Badge size="small" count={favoritedIds?.data?.ids?.length}>
                           <Button type="undefined" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
                         </Badge>
                       </>
