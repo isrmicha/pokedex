@@ -6,40 +6,29 @@ import { PAGE_SIZE, TOTAL_POKEMON_COUNT, } from '~/constants'
 import {
     HeartTwoTone,
 } from '@ant-design/icons'
-import { useSession, } from 'next-auth/react'
-import { useInfinitePokemonsListQuery, } from '~/services/pokedex'
 import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 
-export const Table: React.FC = ({favoritedIds,}) => {
+export const Table: React.FC = ({favoritedIds,preLoadedData,sessionData,isLoadingFavoritedIds,}) => {
     const [page, setPage,] = useState<number>(0)
     const updateFavorites = api.router.updateFavorite.useMutation()
-    const { data: pokemons, isFetching, } = useInfinitePokemonsListQuery(
-        "offset",
-        { offset: page * PAGE_SIZE, limit: PAGE_SIZE, },
-        {
-            getNextPageParam(lastPage) {
-                return {
-                    offset: lastPage.items[lastPage.items.length - 1].id + PAGE_SIZE,
-                    limit: PAGE_SIZE,
-                }
-            },
-            ...(favoritedIds?.data ? {
-                select(data) {
-                    data.pages[0].items = data?.pages?.[0].items.map((item) => {
-                        item.isFavorite = favoritedIds?.data?.ids?.includes(`${item.id}`)
-                        return item
-                    })
-                    return data
-                },
-            } : {}),
-
-        }
-    )
-    const isLoading = favoritedIds.isFetching || isFetching || updateFavorites.isLoading
+    const { data: pokemons, isFetching,} = api.router.getPokemons.useQuery({offset: page * PAGE_SIZE,},{
+        ...(preLoadedData? {
+            initialData: preLoadedData,
+            }: {}),
+        ...(favoritedIds ? {
+            select(data) {
+                data.items = data?.items.map((item) => {
+                    item.isFavorite = favoritedIds?.ids?.includes(`${item.id}`)
+                    return item
+                })
+                return data
+            },} : {}),
+    })
+    const isLoadingFavorites = isLoadingFavoritedIds || updateFavorites.isLoading
     const handleClickFavorite = async (id) => {
-        await updateFavorites.mutateAsync({ id: data?.user.id, index: `${id}`, favoritedIds: favoritedIds?.data?.ids, })
+        await updateFavorites.mutateAsync({ id: sessionData?.user.id, index: `${id}`, favoritedIds: favoritedIds?.ids, })
         await favoritedIds.refetch()
     }
     const handleChangePage = page => setPage(page - 1)
@@ -83,11 +72,12 @@ export const Table: React.FC = ({favoritedIds,}) => {
             key: 'action',
             dataIndex: 'action',
             ellipsis: true,
-            render: (_, record) => (
-                <Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(record?.id)}>
-                    <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
-                </Space>
-            ),
+            render: (_, record) => 
+                isLoadingFavorites ? (<Loading />) : (
+                    <Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(record?.id)}>
+                        <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
+                    </Space>
+                ),
         },
     ]
     return <_Table
@@ -98,8 +88,8 @@ export const Table: React.FC = ({favoritedIds,}) => {
             total: TOTAL_POKEMON_COUNT,
             showSizeChanger: false,
         }}
-        loading={{spinning: isLoading, indicator: <Loading />,}}
-        columns={columns} dataSource={pokemons?.pages?.[0]?.items}
+        loading={{spinning: isFetching, indicator: <Loading />,}}
+        columns={columns} dataSource={pokemons?.items}
         showHeader={false}
         rowKey="id"
         

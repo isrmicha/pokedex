@@ -5,15 +5,17 @@ import { createTRPCContext, } from "~/server/api/trpc"
 import { appRouter, } from "~/server/api/root"
 
 // export API handler
-export default createNextApiHandler({
+const trpc = createNextApiHandler({
   router: appRouter,
   createContext: createTRPCContext,
   onError:
     env.NODE_ENV === "development"
       ? ({ path, error, }) => {
-          console.error(
-            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
-          )
-        }
+        console.error(
+          `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
+        )
+      }
       : undefined,
 })
+
+export default trpc
