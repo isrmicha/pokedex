@@ -37,7 +37,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Develop by isrmicha" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="layout">
+      <Layout className="layout" hasSider={true}>
         <Header style={isMobile ? {paddingInline: 0,} : {}} >
           <div className="logo" />
           <Row justify={"end"}>
