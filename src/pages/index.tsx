@@ -1,4 +1,4 @@
-import {  type NextPage, } from "next"
+import {  type GetStaticPaths, type GetStaticPropsContext, type NextPage, } from "next"
 import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
 import { Avatar, Badge, Button, Col,  Row, Space, Tag, } from 'antd'
@@ -11,11 +11,13 @@ import { FavoriteDrawer, } from "~/components/favorite-drawer"
 import {
   HeartFilled,
 } from '@ant-design/icons'
-import { api, } from "~/utils/api"
 import { Analytics, } from '@vercel/analytics/react'
 import { createServerSideHelpers, } from '@trpc/react-query/server'
-import { appRouter, } from "~/server/api/root"
+// import { appRouter, } from "~/server/api/root"
 import SuperJSON from "superjson"
+import { trpc, } from "~/utils/trpc"
+import { ssgInit, } from "~/server/ssg-init"
+import { i18n, } from 'next-i18next.config'
 
 
 const { Header, Content, Footer, } = Layout
@@ -27,9 +29,8 @@ const Home: NextPage = () => {
   useEffect(() => { if (status === 'unauthenticated') signIn() }, [status,])
   const isMobile = useMedia('(max-width: 480px)', false) 
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const {data: favoritedIds, isLoading: isLoadingFavoritedIds,} = api.router.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
+  const {data: favoritedIds, isLoading: isLoadingFavoritedIds,} = trpc.router.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
   return (
-
     <>
       <Head>
         <title>Pokedex</title>
@@ -49,7 +50,7 @@ const Home: NextPage = () => {
                         <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                         <Tag color="processing" >{sessionData.user?.name}</Tag>
                         <Badge size="small" count={favoritedIds?.ids?.length} >
-                          <Button size="small" type="undefined" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
+                          <Button type="undefined" size="small"  shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
                         </Badge>
                       </>
                     )}
@@ -74,7 +75,7 @@ const Home: NextPage = () => {
               ]}
             />
             <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-              <Table  sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
+              <Table sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
             </div>
           </Content>
         <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
@@ -92,20 +93,17 @@ const Home: NextPage = () => {
 
 export default Home
 
+export const getStaticProps = async (context: GetStaticPropsContext) => {
+  const ssg = await ssgInit(context)
 
+  await ssg.router.getPokemons.prefetch({offset: 0,})
 
-export async function getStaticProps(
-) {
-  const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: {},
-    transformer: SuperJSON, // optional - adds superjson serialization
-  })
-  // prefetch `post.byId`
-  await helpers.router.getPokemons.prefetch({offset: 0,})
   return {
     props: {
-      trpcState: helpers.dehydrate(),
+      trpcState: ssg.dehydrate(),
+      // filter: (context.params?.filter as string) ?? 'all',
+      locale: context.locale ?? context.defaultLocale,
+      locales: context.locales ?? ['sv', 'en',],
     },
     revalidate: 1,
   }

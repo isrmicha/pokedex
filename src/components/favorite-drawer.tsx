@@ -1,10 +1,8 @@
 import { Drawer, } from "antd"
-import { api, } from "~/utils/api"
-
-
+import { trpc, } from "~/utils/trpc"
 
 export const FavoriteDrawer = ({ onClose, open,favoritedIds,}: any) => {
-    const { data: pokemons } = api.router.getPokemons.useQuery(
+    const { data: pokemons, } = trpc.router.getPokemons.useQuery(
         { ids: favoritedIds?.ids, }
     )
 

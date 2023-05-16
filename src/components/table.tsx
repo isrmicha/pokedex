@@ -9,11 +9,13 @@ import {
 import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
+import { trpc, } from "~/utils/trpc"
 
-export const Table: React.FC = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
+export const Table = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
     const [page, setPage,] = useState<number>(0)
-    const updateFavorites = api.router.updateFavorite.useMutation()
-    const { data: pokemons, isFetching,} = api.router.getPokemons.useQuery({offset: page * PAGE_SIZE,},{
+    const updateFavorites = trpc.router.updateFavorite.useMutation()
+    const {invalidate,} = trpc.useContext()
+    const { data: pokemons, isFetching,} = trpc.router.getPokemons.useQuery({offset: page * PAGE_SIZE,},{
         ...(favoritedIds ? {
             select(data) {
                 data.items = data?.items.map((item) => {
@@ -26,7 +28,7 @@ export const Table: React.FC = ({favoritedIds,sessionData,isLoadingFavoritedIds,
     const isLoadingFavorites = isLoadingFavoritedIds || updateFavorites.isLoading
     const handleClickFavorite = async (id) => {
         await updateFavorites.mutateAsync({ id: sessionData?.user.id, index: `${id}`, favoritedIds: favoritedIds?.ids, })
-        await favoritedIds.refetch()
+        await invalidate(["router", "getFavorites",])
     }
     const handleChangePage = page => setPage(page - 1)
     const handleOnErrorImage = (id, event, sprites) => {

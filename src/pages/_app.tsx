@@ -1,40 +1,43 @@
-import { type AppType, } from "next/app"
-import { type Session, } from "next-auth"
+import { ReactQueryDevtools, } from '@tanstack/react-query-devtools'
+import { type SSRConfig, appWithTranslation, } from 'next-i18next'
+import { type AppProps, } from 'next/app'
+import { type ComponentProps, } from 'react'
+import { trpc, } from '../utils/trpc'
 import { SessionProvider, } from "next-auth/react"
-import { QueryClient, QueryClientProvider, } from '@tanstack/react-query'
-import { api, getBaseUrl, } from "~/utils/api"
-import { trpc, } from "~/utils/trpc"
 import "~/styles/globals.css"
-import { httpBatchLink, } from "@trpc/client"
-import { useState, } from "react"
-import SuperJSON from "superjson"
 
+const I18nextAdapter = appWithTranslation<
+  AppProps<SSRConfig> & { children: React.ReactNode }
+>(({ children, }) => <>{children}</>)
 
+const I18nProvider = (props: AppProps) => {
+  const _i18n = trpc.i18n.useQuery(undefined, {
+    trpc: { context: { skipBatch: true, }, },
+  })
 
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
-  const [queryClient,] = useState<QueryClient>(() => new QueryClient())
-  const [trpcClient,] = useState(() =>
-    trpc.createClient({
-      links: [
-        httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`,
-        }),
-      ],
-      transformer: SuperJSON,
-    }),
-  )
+  const locale = _i18n.data?.locale
+  const i18n = _i18n.data?.i18n
+
+  const passedProps = {
+    ...props,
+    pageProps: {
+      ...props.pageProps,
+      ...i18n,
+    },
+    router: locale ? { locale, } : props.router,
+  } as unknown as ComponentProps<typeof I18nextAdapter>
+  return <I18nextAdapter {...passedProps} />
+}
+
+const MyApp = ({ Component, pageProps: { session, ...pageProps }, }: AppProps) => {
   return (
-    <SessionProvider session={session}>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      </trpc.Provider>
+      <SessionProvider session={session}>
+    <I18nProvider {...pageProps}>
+      <Component {...pageProps} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </I18nProvider>
     </SessionProvider>
   )
 }
 
-export default api.withTRPC(MyApp)
+export default trpc.withTRPC(MyApp)
