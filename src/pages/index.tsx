@@ -83,9 +83,15 @@ const Home: NextPage = () => {
         </a>
         </Footer>
       </Layout>
-      {isLoadingFavoritedIds ? <Loading /> :
-       <FavoriteDrawer open={isOpenFavoriteDrawer} 
-       onClose={() => setIsOpenFavoriteDrawer(false)} favoritedIds={favoritedIds} />}
+      {isLoadingFavoritedIds ? <Loading /> : (
+        <>
+         {isOpenFavoriteDrawer && <FavoriteDrawer 
+       onClose={() => setIsOpenFavoriteDrawer(false)} 
+       favoritedIds={favoritedIds}
+        />}
+        </>
+      )
+      }
       <Analytics />
     </>
   )
