@@ -10,13 +10,10 @@ import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 
-export const Table: React.FC = ({favoritedIds,preLoadedData,sessionData,isLoadingFavoritedIds,}) => {
+export const Table: React.FC = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
     const [page, setPage,] = useState<number>(0)
     const updateFavorites = api.router.updateFavorite.useMutation()
     const { data: pokemons, isFetching,} = api.router.getPokemons.useQuery({offset: page * PAGE_SIZE,},{
-        ...(preLoadedData? {
-            initialData: preLoadedData,
-            }: {}),
         ...(favoritedIds ? {
             select(data) {
                 data.items = data?.items.map((item) => {
