@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     token: { colorBgContainer, },
   } = theme.useToken()
   const { data: sessionData, status, } = useSession()
-  useEffect(() => { if (status === 'unauthenticated') signIn() }, [status,])
+  useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
   const isMobile = useMedia('(max-width: 480px)', false) 
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
   const {data: favoritedIds, isLoading: isLoadingFavoritedIds,} = trpc.router.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
