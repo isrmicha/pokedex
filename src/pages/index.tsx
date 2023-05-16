@@ -18,10 +18,12 @@ import SuperJSON from "superjson"
 import { trpc, } from "~/utils/trpc"
 import { ssgInit, } from "~/server/ssg-init"
 import { i18n, } from 'next-i18next.config'
+import { useLocale } from "~/utils/use-locale"
 
 
 const { Header, Content, Footer, } = Layout
 const Home: NextPage = () => {
+  const { t } = useLocale();
   const {
     token: { colorBgContainer, },
   } = theme.useToken()
@@ -55,7 +57,7 @@ const Home: NextPage = () => {
                       </>
                     )}
                     <Button type="primary" onClick={signOut} style={{marginLeft: 15,}}>
-                      {"Sign out"}
+                      {t('sign_out')}
                     </Button>
                   </>
                 )}
@@ -78,7 +80,7 @@ const Home: NextPage = () => {
               <Table sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
             </div>
           </Content>
-        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
+        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} {t("by")}  <a target="_blank" href="https://www.github.com/isrmicha">
           @isrmicha
         </a>
         </Footer>
@@ -107,9 +109,8 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
   return {
     props: {
       trpcState: ssg.dehydrate(),
-      // filter: (context.params?.filter as string) ?? 'all',
       locale: context.locale ?? context.defaultLocale,
-      locales: context.locales ?? ['sv', 'en',],
+      locales: context.locales ?? [ "pt-br", "en"],
     },
     revalidate: 1,
   }

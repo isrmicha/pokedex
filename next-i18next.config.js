@@ -5,8 +5,8 @@ const config = {
   debug: process.env.NODE_ENV === 'development',
   reloadOnPrerender: process.env.NODE_ENV === 'development',
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'sv'],
+    defaultLocale: 'pt-br',
+    locales: [ "pt-br", 'en'],
     localeDetection: false,
   },
   localePath: path.resolve('./public/locales'),
