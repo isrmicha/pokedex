@@ -57,7 +57,7 @@ const Home: NextPage = () => {
                       </>
                     )}
                     <Button type="primary" onClick={signOut} style={{marginLeft: 15,}}>
-                      {t('sign_out')}
+                      Logout
                     </Button>
                   </>
                 )}
@@ -112,6 +112,6 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
       locale: context.locale ?? context.defaultLocale,
       locales: context.locales ?? [ "pt-br", "en"],
     },
-    revalidate: 1,
+    revalidate: false,
   }
 }
