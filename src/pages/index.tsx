@@ -1,7 +1,7 @@
-import {  type GetStaticPaths, type GetStaticPropsContext, type NextPage, } from "next"
+import { GetServerSidePropsContext, type GetStaticPaths, type GetStaticPropsContext, type NextPage, } from "next"
 import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
-import { Avatar, Badge, Button, Col,  Row, Space, Tag, } from 'antd'
+import { Avatar, Badge, Button, Col, Row, Space, Tag, } from 'antd'
 import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
 import { Breadcrumb, Layout, theme, } from 'antd'
@@ -12,26 +12,30 @@ import {
   HeartFilled,
 } from '@ant-design/icons'
 import { Analytics, } from '@vercel/analytics/react'
-import { createServerSideHelpers, } from '@trpc/react-query/server'
+import { createServerSideHelpers } from '@trpc/react-query/server'
 // import { appRouter, } from "~/server/api/root"
 import SuperJSON from "superjson"
 import { trpc, } from "~/utils/trpc"
 import { ssgInit, } from "~/server/ssg-init"
 import { i18n, } from 'next-i18next.config'
 import { useLocale } from "~/utils/use-locale"
+import { appRouter } from "~/server/routers/_app"
+import { getServerSession } from "next-auth"
+import { authOptions } from "~/server/auth"
 
 
 const { Header, Content, Footer, } = Layout
+
 const Home: NextPage = () => {
-  const { t } = useLocale();
   const {
     token: { colorBgContainer, },
   } = theme.useToken()
   const { data: sessionData, status, } = useSession()
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
-  const isMobile = useMedia('(max-width: 480px)', false) 
+  const isMobile = useMedia('(max-width: 480px)', false)
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const {data: favoritedIds, isLoading: isLoadingFavoritedIds,} = trpc.router.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
+  const { data: favoritedIds, isLoading: isLoadingFavoritedIds, } = trpc.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
+
   return (
     <>
       <Head>
@@ -40,57 +44,55 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className="layout">
-        <Header style={isMobile ? {paddingInline: 0,} : {}} >
+        <Header style={isMobile ? { paddingInline: 0, } : {}} >
           <div className="logo" />
           <Row justify={"end"}>
             <Col>
               <Space size={[12, 12,]} wrap>
-                {status === 'loading' ? (<Loading />) : (
-                  <>
-                    {sessionData && (
-                      <>
-                        <Avatar src={sessionData.user.image} alt="Rounded avatar" />
-                        <Tag color="processing" >{sessionData.user?.name}</Tag>
-                        <Badge size="small" count={favoritedIds?.ids?.length} >
-                          <Button type="undefined" size="small"  shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
-                        </Badge>
-                      </>
-                    )}
-                    <Button type="primary" onClick={signOut} style={{marginLeft: 15,}}>
-                      Logout
-                    </Button>
-                  </>
-                )}
+                <>
+                  {sessionData && (
+                    <>
+                      <Avatar src={sessionData.user.image} alt="Rounded avatar" />
+                      <Tag color="processing" >{sessionData.user?.name}</Tag>
+                      <Badge size="small" count={favoritedIds?.ids?.length} >
+                        <Button type="undefined" size="small" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
+                      </Badge>
+                    </>
+                  )}
+                  <Button type="primary" onClick={signOut} style={{ marginLeft: 15, }}>
+                    Logout
+                  </Button>
+                </>
               </Space>
             </Col>
           </Row>
         </Header>
-          <Content style={{ padding: isMobile ? '0 5px' : '0 50px', }}>
-            <Breadcrumb style={{ margin: '16px 0', }}
-              items={[
-                {
-                  title: 'Home',
-                },
-                {
-                  title: <a href="">List</a>,
-                },
-              ]}
-            />
-            <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-              <Table sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
-            </div>
-          </Content>
-        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} {t("by")}  <a target="_blank" href="https://www.github.com/isrmicha">
+        <Content style={{ padding: isMobile ? '0 5px' : '0 50px', }}>
+          <Breadcrumb style={{ margin: '16px 0', }}
+            items={[
+              {
+                title: 'Home',
+              },
+              {
+                title: <a href="">List</a>,
+              },
+            ]}
+          />
+          <div className="site-layout-content" style={{ background: colorBgContainer, }}>
+            <Table sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
+          </div>
+        </Content>
+        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
           @isrmicha
         </a>
         </Footer>
       </Layout>
       {isLoadingFavoritedIds ? <Loading /> : (
         <>
-         {isOpenFavoriteDrawer && <FavoriteDrawer 
-       onClose={() => setIsOpenFavoriteDrawer(false)} 
-       favoritedIds={favoritedIds}
-        />}
+          {isOpenFavoriteDrawer && <FavoriteDrawer
+            onClose={() => setIsOpenFavoriteDrawer(false)}
+            favoritedIds={favoritedIds}
+          />}
         </>
       )
       }
@@ -101,17 +103,26 @@ const Home: NextPage = () => {
 
 export default Home
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-  const ssg = await ssgInit(context)
+export async function getServerSideProps(
+  context: GetServerSidePropsContext,
+) {
+  const [helpers, session] = await Promise.all([
+    ssgInit(context),
+    getServerSession(
+      context.req,
+      context.res,
+      authOptions
+    )
+  ])
 
-  await ssg.router.getPokemons.prefetch({offset: 0,})
-
+  await Promise.all([
+    helpers.getPokemons.prefetch({ offset: 0 }),
+    ...(session?.user.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
+  ])
   return {
     props: {
-      trpcState: ssg.dehydrate(),
-      locale: context.locale ?? context.defaultLocale,
-      locales: context.locales ?? [ "pt-br", "en"],
+      trpcState: helpers.dehydrate(),
+      session
     },
-    revalidate: false,
-  }
+  };
 }

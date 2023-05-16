@@ -1,7 +1,7 @@
 import type { inferAsyncReturnType } from '@trpc/server';
 import type { CreateNextContextOptions } from '@trpc/server/adapters/next';
-import { i18n } from 'next-i18next.config';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// import { i18n } from 'next-i18next.config';
+// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { prisma } from './prisma';
 
 /**
@@ -10,8 +10,8 @@ import { prisma } from './prisma';
  */
 export interface CreateInnerContextOptions
   extends Partial<CreateNextContextOptions> {
-  locale: string;
-  i18n: inferAsyncReturnType<typeof serverSideTranslations>;
+  // locale: string;
+  // i18n: inferAsyncReturnType<typeof serverSideTranslations>;
 }
 
 /**
@@ -25,9 +25,8 @@ export interface CreateInnerContextOptions
  */
 export async function createInnerTRPCContext(opts?: CreateInnerContextOptions) {
   return {
-    prisma,
-    task: prisma.task,
     ...opts,
+    prisma,
   };
 }
 
@@ -37,21 +36,21 @@ export async function createInnerTRPCContext(opts?: CreateInnerContextOptions) {
  * @see https://trpc.io/docs/context#inner-and-outer-context
  */
 export const createTRPCContext = async (opts?: CreateNextContextOptions) => {
-  const acceptLanguage = opts?.req.headers['accept-language'];
+  // const acceptLanguage = opts?.req.headers['accept-language'];
   // If you store locales on User in DB, you can use that instead
   // We use the accept-language header to determine the locale here.
   // const locale = acceptLanguage?.includes('en') ? 'en' : 'pt-br';
-  const locale =  'pt-br';
-  const _i18n = await serverSideTranslations(locale, ['common']);
+  // const locale =  'pt-br';
+  // const _i18n = await serverSideTranslations(locale, ['common']);
 
   const innerContext = await createInnerTRPCContext({
     req: opts?.req,
-    locale,
-    i18n: _i18n,
+    // locale,
+    // i18n: _i18n,
   });
 
   return {
-    ...innerContext,
     req: opts?.req,
+    ...innerContext,
   };
 };

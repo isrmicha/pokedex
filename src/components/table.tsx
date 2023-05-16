@@ -11,11 +11,11 @@ import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 import { trpc, } from "~/utils/trpc"
 
-export const Table = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
+export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds, }) => {
     const [page, setPage,] = useState<number>(0)
-    const updateFavorites = trpc.router.updateFavorite.useMutation()
-    const {invalidate,} = trpc.useContext()
-    const { data: pokemons, isFetching,} = trpc.router.getPokemons.useQuery({offset: page * PAGE_SIZE,},{
+    const updateFavorites = trpc.updateFavorite.useMutation()
+    const { invalidate, } = trpc.useContext()
+    const { data: pokemons, isFetching, } = trpc.getPokemons.useQuery({ offset: page * PAGE_SIZE, }, {
         ...(favoritedIds ? {
             select(data) {
                 data.items = data?.items.map((item) => {
@@ -23,7 +23,8 @@ export const Table = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
                     return item
                 })
                 return data
-            },} : {}),
+            },
+        } : {}),
     })
     const isLoadingFavorites = isLoadingFavoritedIds || updateFavorites.isLoading
     const handleClickFavorite = async (id) => {
@@ -71,7 +72,7 @@ export const Table = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
             key: 'action',
             dataIndex: 'action',
             ellipsis: true,
-            render: (_, record) => 
+            render: (_, record) =>
                 isLoadingFavorites ? (<Loading />) : (
                     <Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(record?.id)}>
                         <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
@@ -87,11 +88,11 @@ export const Table = ({favoritedIds,sessionData,isLoadingFavoritedIds,}) => {
             total: TOTAL_POKEMON_COUNT,
             showSizeChanger: false,
         }}
-        loading={{spinning: isFetching, indicator: <Loading />,}}
+        loading={{ spinning: isFetching, indicator: <Loading />, }}
         columns={columns} dataSource={pokemons?.items}
         showHeader={false}
         rowKey="id"
-        
+
     />
 }
 

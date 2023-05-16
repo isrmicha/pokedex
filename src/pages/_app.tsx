@@ -31,11 +31,11 @@ const I18nProvider = (props: AppProps) => {
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps }, }: AppProps) => {
   return (
-      <SessionProvider session={session}>
-    <I18nProvider {...pageProps}>
+    <SessionProvider session={session}>
+      {/* <I18nProvider {...pageProps}> */}
       <Component {...pageProps} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </I18nProvider>
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      {/* </I18nProvider> */}
     </SessionProvider>
   )
 }

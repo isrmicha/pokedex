@@ -9,8 +9,8 @@ import { appRouter, } from './routers/_app'
 export async function ssgInit<TParams extends { locale?: string }>(
   opts: GetStaticPropsContext<TParams>,
 ) {
-  const locale = opts.params?.locale ?? opts?.locale ?? i18n.defaultLocale
-  const _i18n = await serverSideTranslations(locale, ['common',])
+  // const locale = opts.params?.locale ?? opts?.locale ?? i18n.defaultLocale
+  // const _i18n = await serverSideTranslations(locale, ['common',])
 
   const ssg = createServerSideHelpers({
      queryClientConfig: {
@@ -18,19 +18,20 @@ export async function ssgInit<TParams extends { locale?: string }>(
           queries: {
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
+            refetchOnMount: false,
           },
         },
       },
     router: appRouter,
     transformer: SuperJSON,
     ctx: await createInnerTRPCContext({
-      locale,
-      i18n: _i18n,
+      // locale,
+      // i18n: _i18n,
     }),
   })
 
   // Prefetch i18n everytime
-  await ssg.i18n.fetch()
+  // await ssg.i18n.fetch()
 
   return ssg
 }
