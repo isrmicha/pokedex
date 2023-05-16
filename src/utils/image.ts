@@ -1,4 +1,4 @@
-export const getPokemonImage = (id: number, fallback: boolean, sprites: any): string => {
+export const getPokemonImage = (id: number, fallback: boolean = false, sprites: any = []): string => {
     if (fallback) {
         const newUrl = JSON.parse(sprites?.[0]?.sprites)?.front_default?.replaceAll('media', '')
         if (newUrl) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/${newUrl}`
