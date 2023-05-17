@@ -106,18 +106,18 @@ export default Home
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ) {
-  const [helpers, session] = await Promise.all([
+  const [helpers] = await Promise.all([
     ssgInit(context),
-    getServerSession(
-      context.req,
-      context.res,
-      authOptions
-    )
+    // getServerSession(
+    //   context.req,
+    //   context.res,
+    //   authOptions
+    // )
   ])
 
   await Promise.all([
     helpers.getPokemons.prefetch({ offset: 0 }),
-    ...(session?.user?.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
+    // ...(session?.user?.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
   ])
   return {
     props: {
