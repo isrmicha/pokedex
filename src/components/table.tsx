@@ -1,5 +1,5 @@
 import React, { useState, } from 'react'
-import { Image, Space, Tag, Table as _Table, } from 'antd'
+import { Space, Tag, Table as _Table, } from 'antd'
 import type { ColumnsType, } from 'antd/es/table'
 import { api, } from '~/utils/api'
 import { PAGE_SIZE, TOTAL_POKEMON_COUNT, } from '~/constants'
@@ -10,6 +10,7 @@ import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 import { trpc, } from "~/utils/trpc"
+import Image from 'next/image'
 
 export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds, }) => {
     const [page, setPage,] = useState<number>(0)
@@ -60,10 +61,6 @@ export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds, }) => 
             render: (_, record) => (
                 <Image alt={record.name} src={getPokemonImage(record.id)} width={50} height={50}
                     onError={event => handleOnErrorImage(record.id, event, record.sprites)}
-                    preview={{
-                        width: 200,
-                        height: 200,
-                    }}
                 />
             ),
         },
