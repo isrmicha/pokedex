@@ -117,12 +117,11 @@ export async function getServerSideProps(
 
   await Promise.all([
     helpers.getPokemons.prefetch({ offset: 0 }),
-    ...(session?.user.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
+    ...(session?.user?.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
   ])
   return {
     props: {
       trpcState: helpers.dehydrate(),
-      session
     },
   };
 }
