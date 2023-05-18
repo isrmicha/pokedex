@@ -10,7 +10,7 @@ export const FavoriteDrawer = ({ onClose, favoritedIds, }: any) => {
     )
 
     return <Drawer title="Favorites" placement="right" open={true} onClose={() => onClose(false)}>
-        {pokemons?.items.map(({ id, name }) => <p key={id}><Image src={getPokemonImage(id)}
+        {pokemons?.items.map(({ id, name }) => <p key={id}><Image alt={name} src={getPokemonImage(id)}
             width={25} height={25} /> #{id} - {startCase(name)}</p>)}
     </Drawer>
 }
