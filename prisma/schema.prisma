@@ -1,3 +1,15 @@
+generator trpc {
+  provider                 = "prisma-trpc-generator"
+  withZod                  = true
+  withMiddleware           = false
+  withShield               = false
+  isGenerateSelect         = true
+  isGenerateInclude        = true
+  showModelNameInProcedure = false
+  contextPath              = "../src/server/context"
+  trpcOptionsPath          = "../src/server/trpc"
+}
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
@@ -60,9 +72,9 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model favorites {
-  id        String   @id @unique
-  ids       String[]
-  createdAt DateTime @unique @default(now())
-  updatedAt DateTime @unique @default(now())
+model Favorite {
+  id         String   @id @unique
+  pokemonIds String[]
+  createdAt  DateTime @unique @default(now())
+  updatedAt  DateTime @unique @default(now())
 }

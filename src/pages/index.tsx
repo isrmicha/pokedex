@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, type GetStaticPaths, type GetStaticPropsContext, type NextPage, } from "next"
+import { GetServerSidePropsContext, type NextPage, } from "next"
 import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
 import { Avatar, Badge, Button, Col, Row, Space, Tag, } from 'antd'
@@ -12,16 +12,9 @@ import {
   HeartFilled,
 } from '@ant-design/icons'
 import { Analytics, } from '@vercel/analytics/react'
-import { createServerSideHelpers } from '@trpc/react-query/server'
-// import { appRouter, } from "~/server/api/root"
-import SuperJSON from "superjson"
 import { trpc, } from "~/utils/trpc"
 import { ssgInit, } from "~/server/ssg-init"
-import { i18n, } from 'next-i18next.config'
-import { useLocale } from "~/utils/use-locale"
-import { appRouter } from "~/server/routers/_app"
-import { getServerSession } from "next-auth"
-import { authOptions } from "~/server/auth"
+
 
 
 const { Header, Content, Footer, } = Layout
@@ -34,8 +27,13 @@ const Home: NextPage = () => {
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
   const isMobile = useMedia('(max-width: 480px)', false)
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const { data: favoritedIds, isLoading: isLoadingFavoritedIds, } = trpc.getFavorites.useQuery({ id: sessionData?.user?.id, }, { enabled: !!sessionData?.user.id, })
-
+  const { data: favoriteData, isLoading: isLoadingFavoritedIds, } = trpc.favorite.findUnique
+    .useQuery({
+      where: {
+        id: sessionData?.user?.id,
+      }
+    }, { enabled: !!sessionData?.user.id, })
+  const favoritedIds = favoriteData?.pokemonIds
   return (
     <>
       <Head>
@@ -54,7 +52,7 @@ const Home: NextPage = () => {
                     <>
                       <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                       <Tag color="processing" >{sessionData.user?.name}</Tag>
-                      <Badge size="small" count={favoritedIds?.ids?.length} >
+                      <Badge size="small" count={favoritedIds?.length} >
                         <Button type="undefined" size="small" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
                       </Badge>
                     </>
@@ -108,16 +106,9 @@ export async function getServerSideProps(
 ) {
   const [helpers] = await Promise.all([
     ssgInit(context),
-    // getServerSession(
-    //   context.req,
-    //   context.res,
-    //   authOptions
-    // )
   ])
-
   await Promise.all([
-    helpers.getPokemons.prefetch({ offset: 0 }),
-    // ...(session?.user?.id ? [helpers.getFavorites.prefetch({ id: session?.user.id })] : []),
+    helpers.pokemon.getPokemons.prefetch({ offset: 0 }),
   ])
   return {
     props: {

@@ -1,6 +1,0 @@
-5/16 12:49:26.288  vendor: GenuineIntel
-5/16 12:49:26.288  branding: VirtualApple @ 2.50GHz
-5/16 12:49:26.288  features: lahf64 cmpxchg16b sse sse2 sse3 ssse3 sse41 sse42 aesni clmul 
-5/16 12:49:26.288  sockets: 1
-5/16 12:49:26.288  cores: 8
-5/16 12:49:26.288  threads: 8

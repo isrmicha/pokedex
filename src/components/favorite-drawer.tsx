@@ -5,8 +5,8 @@ import { getPokemonImage } from "~/utils/image"
 import { trpc, } from "~/utils/trpc"
 
 export const FavoriteDrawer = ({ onClose, favoritedIds, }: any) => {
-    const { data: pokemons, } = trpc.getPokemons.useQuery(
-        { ids: favoritedIds?.ids, }
+    const { data: pokemons, } = trpc.pokemon.getPokemons.useQuery(
+        { ids: favoritedIds, }
     )
 
     return <Drawer title="Favorites" placement="right" open={true} onClose={() => onClose(false)}>
