@@ -31,6 +31,9 @@ const Home: NextPage = () => {
     .useQuery({
       where: {
         id: sessionData?.user?.id,
+      },
+      select: {
+        pokemonIds: true,
       }
     }, { enabled: !!sessionData?.user.id, })
   const favoritedIds = favoriteData?.pokemonIds

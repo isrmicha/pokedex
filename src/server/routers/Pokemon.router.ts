@@ -92,7 +92,6 @@ export const pokemonsRouter = t.router({
             const data = await fetcher(ids ? ListPokemonsQueryByIds : ListPokemonsQuery, ids ? { ids, } : { offset: offset || 0, limit: PAGE_SIZE, })()
             return data
         }),
-
 })
 
 
