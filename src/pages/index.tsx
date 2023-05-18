@@ -74,9 +74,11 @@ const Home: NextPage = () => {
                       </Badge>
                     </>
                   )}
-                  <Button type="primary" onClick={signOut} style={{ marginLeft: 15, }}>
-                    Logout
-                  </Button>
+                  {status === 'loading' ? <Loading /> : (
+                    <Button type="primary" onClick={signOut} style={{ marginLeft: 15, }}>
+                      Logout
+                    </Button>
+                  )}
                 </>
               </Space>
             </Col>
