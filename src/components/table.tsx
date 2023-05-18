@@ -11,14 +11,14 @@ import { Loading, } from './loading'
 import { trpc, } from "~/utils/trpc"
 import Image from 'next/image'
 
-export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds, }: {
-    favoritedIds: string[],
-    sessionData: any,
-    isLoadingFavoritedIds: boolean,
-}) => {
+export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds,
+    upsertOneFavorite, handleClickFavorite }: {
+        favoritedIds: string[],
+        sessionData: any,
+        isLoadingFavoritedIds: boolean,
+    }) => {
     const [page, setPage,] = useState<number>(0)
-    const upsertOneFavorite = trpc.favorite.upsertOne.useMutation()
-    const { invalidate, } = trpc.useContext()
+
     const { data: pokemons, isFetching, } = trpc.pokemon.getPokemons.useQuery({ offset: page * PAGE_SIZE, }, {
         ...(favoritedIds ? {
             select(data) {
@@ -31,17 +31,7 @@ export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds, }: {
         } : {}),
     })
     const isLoadingFavorites = isLoadingFavoritedIds || upsertOneFavorite.isLoading
-    const handleClickFavorite = async (id: string) => {
-        const pokemonIds = !!favoritedIds ? favoritedIds?.includes(id) ? favoritedIds?.filter(pokemonId => pokemonId !== id) : [...favoritedIds, id,] : [id,]
-        await upsertOneFavorite.mutateAsync(
-            {
-                create: { id: sessionData?.user?.id, pokemonIds, },
-                update: { pokemonIds },
-                where: { id: sessionData?.user?.id }
-            }
-        )
-        await invalidate()
-    }
+
     const handleChangePage = (page: number) => setPage(page - 1)
     const handleOnErrorImage = (id, event, sprites) => {
         event.target.src = getPokemonImage(id, true, sprites)

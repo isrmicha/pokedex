@@ -36,6 +36,20 @@ const Home: NextPage = () => {
         pokemonIds: true,
       }
     }, { enabled: !!sessionData?.user.id, })
+  const upsertOneFavorite = trpc.favorite.upsertOne.useMutation()
+  const { invalidate, } = trpc.useContext()
+  const handleClickFavorite = async (id: string) => {
+    const pokemonIds = !!favoritedIds ? favoritedIds?.includes(id) ? favoritedIds?.filter(pokemonId => pokemonId !== id) : [...favoritedIds, id,] : [id,]
+    await upsertOneFavorite.mutateAsync(
+      {
+        create: { id: sessionData?.user?.id, pokemonIds, },
+        update: { pokemonIds },
+        where: { id: sessionData?.user?.id }
+      }
+    )
+    await invalidate()
+  }
+
   const favoritedIds = favoriteData?.pokemonIds
   return (
     <>
@@ -80,7 +94,12 @@ const Home: NextPage = () => {
             ]}
           />
           <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-            <Table sessionData={sessionData} favoritedIds={favoritedIds} isLoadingFavoritedIds={isLoadingFavoritedIds} />
+            <Table sessionData={sessionData}
+              favoritedIds={favoritedIds}
+              isLoadingFavoritedIds={isLoadingFavoritedIds}
+              upsertOneFavorite={upsertOneFavorite}
+              handleClickFavorite={handleClickFavorite}
+            />
           </div>
         </Content>
         <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
@@ -91,6 +110,8 @@ const Home: NextPage = () => {
       {isLoadingFavoritedIds ? <Loading /> : (
         <>
           {isOpenFavoriteDrawer && <FavoriteDrawer
+            upsertOneFavorite={upsertOneFavorite}
+            handleClickFavorite={handleClickFavorite}
             onClose={() => setIsOpenFavoriteDrawer(false)}
             favoritedIds={favoritedIds}
           />}
