@@ -22,12 +22,6 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -62,6 +56,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  favorites     String[]  @default([])
 }
 
 model VerificationToken {
@@ -70,11 +65,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model Favorite {
-  id         String   @id @unique
-  pokemonIds String[]
-  createdAt  DateTime @unique @default(now())
-  updatedAt  DateTime @unique @default(now())
 }

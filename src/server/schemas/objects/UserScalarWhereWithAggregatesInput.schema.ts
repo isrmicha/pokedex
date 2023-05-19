@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { StringWithAggregatesFilterObjectSchema } from './StringWithAggregatesFilter.schema';
 import { StringNullableWithAggregatesFilterObjectSchema } from './StringNullableWithAggregatesFilter.schema';
 import { DateTimeNullableWithAggregatesFilterObjectSchema } from './DateTimeNullableWithAggregatesFilter.schema';
+import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 
 import type { Prisma } from '@prisma/client';
 
@@ -54,6 +55,7 @@ const Schema: z.ZodType<Prisma.UserScalarWhereWithAggregatesInput> = z
       ])
       .optional()
       .nullable(),
+    favorites: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   })
   .strict();
 

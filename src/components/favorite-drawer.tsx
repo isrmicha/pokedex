@@ -7,14 +7,12 @@ import { getPokemonImage } from "~/utils/image"
 import { trpc, } from "~/utils/trpc"
 import { Loading } from "./loading"
 
-export const FavoriteDrawer = ({ onClose, favoritedIds, upsertOneFavorite, handleClickFavorite }: any) => {
+export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavorite }: any) => {
     const { data: pokemons, } = trpc.pokemon.getPokemons.useQuery(
-        { ids: favoritedIds, }
+        { ids: favorites, }
     )
 
     return <Drawer title="Favorites" placement="right" open={true} onClose={() => onClose(false)}>
-
-
         <List
             itemLayout="horizontal"
             dataSource={pokemons?.items}
@@ -26,7 +24,7 @@ export const FavoriteDrawer = ({ onClose, favoritedIds, upsertOneFavorite, handl
                         description={`#${id}`}
                     />
                     <div>
-                        {upsertOneFavorite.isLoading ? <Loading /> :
+                        {updateUser.isLoading ? <Loading /> :
                             (<Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(`${id}`)}>
                                 <HeartTwoTone twoToneColor={"red"} />
                             </Space>)}

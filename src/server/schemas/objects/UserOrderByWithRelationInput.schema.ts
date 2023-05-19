@@ -12,6 +12,7 @@ const Schema: z.ZodType<Prisma.UserOrderByWithRelationInput> = z
     email: z.lazy(() => SortOrderSchema).optional(),
     emailVerified: z.lazy(() => SortOrderSchema).optional(),
     image: z.lazy(() => SortOrderSchema).optional(),
+    favorites: z.lazy(() => SortOrderSchema).optional(),
     accounts: z
       .lazy(() => AccountOrderByRelationAggregateInputObjectSchema)
       .optional(),

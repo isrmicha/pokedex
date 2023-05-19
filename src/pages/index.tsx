@@ -27,30 +27,29 @@ const Home: NextPage = () => {
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
   const isMobile = useMedia('(max-width: 480px)', false)
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const { data: favoriteData, isLoading: isLoadingFavoritedIds, } = trpc.favorite.findUnique
+  const { data: userData, isLoading: isLoadingFavoritedIds, } = trpc.user.findUnique
     .useQuery({
       where: {
         id: sessionData?.user?.id,
       },
       select: {
-        pokemonIds: true,
+        favorites: true
       }
     }, { enabled: !!sessionData?.user.id, })
-  const upsertOneFavorite = trpc.favorite.upsertOne.useMutation()
+  const updateUser = trpc.user.updateOne.useMutation()
   const { invalidate, } = trpc.useContext()
+  const favorites = userData?.favorites
   const handleClickFavorite = async (id: string) => {
-    const pokemonIds = !!favoritedIds ? favoritedIds?.includes(id) ? favoritedIds?.filter(pokemonId => pokemonId !== id) : [...favoritedIds, id,] : [id,]
-    await upsertOneFavorite.mutateAsync(
+    const newFavorites = !!favorites ? favorites?.includes(id) ? favorites?.filter(pokemonId => pokemonId !== id) : [...favorites, id,] : [id,]
+    await updateUser.mutateAsync(
       {
-        create: { id: sessionData?.user?.id, pokemonIds, },
-        update: { pokemonIds },
+        data: { favorites: newFavorites },
         where: { id: sessionData?.user?.id }
       }
     )
     await invalidate()
   }
 
-  const favoritedIds = favoriteData?.pokemonIds
   return (
     <>
       <Head>
@@ -69,7 +68,7 @@ const Home: NextPage = () => {
                     <>
                       <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                       <Tag color="processing" >{sessionData.user?.name}</Tag>
-                      <Badge size="small" count={favoritedIds?.length} >
+                      <Badge size="small" count={favorites?.length} >
                         <Button type="undefined" size="small" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
                       </Badge>
                     </>
@@ -97,9 +96,9 @@ const Home: NextPage = () => {
           />
           <div className="site-layout-content" style={{ background: colorBgContainer, }}>
             <Table sessionData={sessionData}
-              favoritedIds={favoritedIds}
               isLoadingFavoritedIds={isLoadingFavoritedIds}
-              upsertOneFavorite={upsertOneFavorite}
+              favorites={favorites}
+              updateUser={updateUser}
               handleClickFavorite={handleClickFavorite}
             />
           </div>
@@ -112,10 +111,10 @@ const Home: NextPage = () => {
       {isLoadingFavoritedIds ? <Loading /> : (
         <>
           {isOpenFavoriteDrawer && <FavoriteDrawer
-            upsertOneFavorite={upsertOneFavorite}
+            favorites={favorites}
+            updateUser={updateUser}
             handleClickFavorite={handleClickFavorite}
             onClose={() => setIsOpenFavoriteDrawer(false)}
-            favoritedIds={favoritedIds}
           />}
         </>
       )

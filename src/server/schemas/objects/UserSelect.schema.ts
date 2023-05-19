@@ -18,6 +18,7 @@ const Schema: z.ZodType<Prisma.UserSelect> = z
     sessions: z
       .union([z.boolean(), z.lazy(() => SessionFindManySchema)])
       .optional(),
+    favorites: z.boolean().optional(),
     _count: z
       .union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)])
       .optional(),

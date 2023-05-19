@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserCreatefavoritesInputObjectSchema } from './UserCreatefavoritesInput.schema';
 import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCreateNestedManyWithoutUserInput.schema';
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 
@@ -11,6 +12,12 @@ const Schema: z.ZodType<Prisma.UserCreateInput> = z
     email: z.string().optional().nullable(),
     emailVerified: z.date().optional().nullable(),
     image: z.string().optional().nullable(),
+    favorites: z
+      .union([
+        z.lazy(() => UserCreatefavoritesInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
     accounts: z
       .lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema)
       .optional(),

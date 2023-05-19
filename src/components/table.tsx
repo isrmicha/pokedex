@@ -11,26 +11,21 @@ import { Loading, } from './loading'
 import { trpc, } from "~/utils/trpc"
 import Image from 'next/image'
 
-export const Table = ({ favoritedIds, sessionData, isLoadingFavoritedIds,
-    upsertOneFavorite, handleClickFavorite }: {
-        favoritedIds: string[],
-        sessionData: any,
-        isLoadingFavoritedIds: boolean,
-    }) => {
+export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClickFavorite }) => {
     const [page, setPage,] = useState<number>(0)
 
     const { data: pokemons, isFetching, } = trpc.pokemon.getPokemons.useQuery({ offset: page * PAGE_SIZE, }, {
-        ...(favoritedIds ? {
+        ...(favorites ? {
             select(data) {
                 data.items = data?.items.map((item) => {
-                    item.isFavorite = favoritedIds?.includes(`${item.id}`)
+                    item.isFavorite = favorites?.includes(`${item.id}`)
                     return item
                 })
                 return data
             },
         } : {}),
     })
-    const isLoadingFavorites = isLoadingFavoritedIds || upsertOneFavorite.isLoading
+    const isLoadingFavorites = isLoadingFavoritedIds || updateUser.isLoading
 
     const handleChangePage = (page: number) => setPage(page - 1)
     const handleOnErrorImage = (id, event, sprites) => {

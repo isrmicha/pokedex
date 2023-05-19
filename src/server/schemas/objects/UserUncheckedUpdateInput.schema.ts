@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './NullableDateTimeFieldUpdateOperationsInput.schema';
+import { UserUpdatefavoritesInputObjectSchema } from './UserUpdatefavoritesInput.schema';
 import { AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './AccountUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserNestedInput.schema';
 
@@ -43,6 +44,12 @@ const Schema: z.ZodType<Prisma.UserUncheckedUpdateInput> = z
       ])
       .optional()
       .nullable(),
+    favorites: z
+      .union([
+        z.lazy(() => UserUpdatefavoritesInputObjectSchema),
+        z.string().array(),
+      ])
+      .optional(),
     accounts: z
       .lazy(() => AccountUncheckedUpdateManyWithoutUserNestedInputObjectSchema)
       .optional(),
