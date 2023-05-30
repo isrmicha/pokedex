@@ -14,7 +14,7 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
         pageIndex: 0,
         pageSize: 10,
     });
-    const { data: pokemons, isFetching, } = trpc.pokemon.getPokemons.useQuery({
+    const { data: pokemons, isFetching } = trpc.pokemon.getPokemons.useQuery({
         offset:
             pagination.pageIndex * pagination.pageSize,
         limit: pagination.pageSize,
@@ -78,8 +78,8 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
         enablePagination
         manualPagination
         onPaginationChange={setPagination}
-        state={{ isLoading: isFetching, pagination }}
-        muiTableBodyCellSkeletonProps={{ width: '100%', height: 55, active: true }}
+        state={{ isLoading: isFetching && !pokemons?.items?.length, pagination }}
+        muiTableBodyCellSkeletonProps={{ width: '100%', height: 55 }}
         rowCount={TOTAL_POKEMON_COUNT}
     />
 }

@@ -63,7 +63,6 @@ const Home: NextPage = () => {
             {sessionData && (
 
               <>
-
                 <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                 <Chip style={{ color: "white" }} label={sessionData.user?.name} />
                 <Badge badgeContent={favorites?.length} color="primary">
@@ -116,7 +115,7 @@ export async function getServerSideProps(
     ssgInit(context),
   ])
   await Promise.all([
-    helpers.pokemon.getPokemons.prefetch({ offset: 0 }),
+    helpers.pokemon.getPokemons.prefetch({ offset: 0, limit: 10 }),
   ])
   return {
     props: {
