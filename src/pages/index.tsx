@@ -96,17 +96,12 @@ const Home: NextPage = () => {
         />
       </div>
 
-      {isLoadingFavoritedIds ? <Loading /> : (
-        <>
-          {isOpenFavoriteDrawer && <FavoriteDrawer
-            favorites={favorites}
-            updateUser={updateUser}
-            handleClickFavorite={handleClickFavorite}
-            onClose={() => setIsOpenFavoriteDrawer(false)}
-          />}
-        </>
-      )
-      }
+      {isOpenFavoriteDrawer && <FavoriteDrawer
+        favorites={favorites}
+        updateUser={updateUser}
+        handleClickFavorite={handleClickFavorite}
+        onClose={() => setIsOpenFavoriteDrawer(false)}
+      />}
       <Analytics />
     </>
   )
