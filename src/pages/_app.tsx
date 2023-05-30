@@ -1,43 +1,40 @@
-import { ReactQueryDevtools, } from '@tanstack/react-query-devtools'
-import { type SSRConfig, appWithTranslation, } from 'next-i18next'
-import { type AppProps, } from 'next/app'
-import { type ComponentProps, } from 'react'
-import { trpc, } from '../utils/trpc'
-import { SessionProvider, } from "next-auth/react"
-import "~/styles/globals.css"
+import * as React from 'react';
+import Head from 'next/head';
+import { AppProps } from 'next/app';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import theme from '../config/theme';
+import createEmotionCache from '../config/createEmotionCache';
+import { SessionProvider } from 'next-auth/react';
+import { trpc } from '~/utils/trpc';
 
-const I18nextAdapter = appWithTranslation<
-  AppProps<SSRConfig> & { children: React.ReactNode }
->(({ children, }) => <>{children}</>)
 
-const I18nProvider = (props: AppProps) => {
-  const _i18n = trpc.i18n.useQuery(undefined, {
-    trpc: { context: { skipBatch: true, }, },
-  })
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
 
-  const locale = _i18n.data?.locale
-  const i18n = _i18n.data?.i18n
-
-  const passedProps = {
-    ...props,
-    pageProps: {
-      ...props.pageProps,
-      ...i18n,
-    },
-    router: locale ? { locale, } : props.router,
-  } as unknown as ComponentProps<typeof I18nextAdapter>
-  return <I18nextAdapter {...passedProps} />
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
 }
 
-const MyApp = ({ Component, pageProps: { session, ...pageProps }, }: AppProps) => {
+function MyApp(props: MyAppProps) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
-    <SessionProvider session={session}>
-      {/* <I18nProvider {...pageProps}> */}
-      <Component {...pageProps} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-      {/* </I18nProvider> */}
-    </SessionProvider>
-  )
+    <CacheProvider value={emotionCache}>
+      <SessionProvider session={pageProps?.session}>
+
+        <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </SessionProvider>
+
+    </CacheProvider>
+  );
 }
 
 export default trpc.withTRPC(MyApp)

@@ -1,28 +1,22 @@
 import { GetServerSidePropsContext, type NextPage, } from "next"
 import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
-import { Avatar, Badge, Button, Col, Row, Space, Tag, } from 'antd'
 import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
-import { Breadcrumb, Layout, theme, } from 'antd'
 import { useEffect, useState, } from "react"
 import { useMedia, } from "react-use"
 import { FavoriteDrawer, } from "~/components/favorite-drawer"
-import {
-  HeartFilled,
-} from '@ant-design/icons'
 import { Analytics, } from '@vercel/analytics/react'
 import { trpc, } from "~/utils/trpc"
 import { ssgInit, } from "~/server/ssg-init"
+import { AppBar, Avatar, Badge, Box, Button, Chip, IconButton, Toolbar } from "@mui/material"
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import Grid from "@mui/material/Unstable_Grid2"
 
 
 
-const { Header, Content, Footer, } = Layout
 
 const Home: NextPage = () => {
-  const {
-    token: { colorBgContainer, },
-  } = theme.useToken()
   const { data: sessionData, status, } = useSession()
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
   const isMobile = useMedia('(max-width: 480px)', false)
@@ -57,57 +51,45 @@ const Home: NextPage = () => {
         <meta name="description" content="Develop by isrmicha" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout className="layout">
-        <Header style={isMobile ? { paddingInline: 0, } : {}} >
-          <div className="logo" />
-          <Row justify={"end"}>
-            <Col>
-              <Space size={[12, 12,]} wrap>
-                <>
-                  {sessionData && (
-                    <>
-                      <Avatar src={sessionData.user.image} alt="Rounded avatar" />
-                      <Tag color="processing" >{sessionData.user?.name}</Tag>
-                      <Badge size="small" count={favorites?.length} >
-                        <Button type="undefined" size="small" shape="circle" icon={<HeartFilled style={{ color: "red", }} onClick={() => setIsOpenFavoriteDrawer(true)} />} />
-                      </Badge>
-                    </>
-                  )}
-                  {status === 'loading' ? <Loading /> : (
-                    <Button type="primary" onClick={signOut} style={{ marginLeft: 15, }}>
-                      Logout
-                    </Button>
-                  )}
-                </>
-              </Space>
-            </Col>
-          </Row>
-        </Header>
-        <Content style={{ padding: isMobile ? '0 5px' : '0 50px', }}>
-          <Breadcrumb style={{ margin: '16px 0', }}
-            items={[
-              {
-                title: 'Home',
-              },
-              {
-                title: <a href="">List</a>,
-              },
-            ]}
-          />
-          <div className="site-layout-content" style={{ background: colorBgContainer, }}>
-            <Table sessionData={sessionData}
-              isLoadingFavoritedIds={isLoadingFavoritedIds}
-              favorites={favorites}
-              updateUser={updateUser}
-              handleClickFavorite={handleClickFavorite}
-            />
-          </div>
-        </Content>
-        <Footer style={{ textAlign: 'center', }}>©{new Date().getFullYear()} by  <a target="_blank" href="https://www.github.com/isrmicha">
-          @isrmicha
-        </a>
-        </Footer>
-      </Layout>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            {sessionData && (
+
+              <>
+
+                <Avatar src={sessionData.user.image} alt="Rounded avatar" />
+                <Chip label={sessionData.user?.name} />
+                <Badge badgeContent={favorites?.length} color="primary">
+                  <IconButton aria-label="favorites" onClick={() => setIsOpenFavoriteDrawer(true)}>
+                    <FavoriteIcon />
+                  </IconButton>
+                </Badge>
+              </>
+
+            )}
+            {status === 'loading' ? <Loading /> : (
+              <Button variant="outlined"
+                onClick={signOut}
+              >Logout
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      </Box>
+
+
+
+
+      <div className="site-layout-content">
+        <Table sessionData={sessionData}
+          isLoadingFavoritedIds={isLoadingFavoritedIds}
+          favorites={favorites}
+          updateUser={updateUser}
+          handleClickFavorite={handleClickFavorite}
+        />
+      </div>
+
       {isLoadingFavoritedIds ? <Loading /> : (
         <>
           {isOpenFavoriteDrawer && <FavoriteDrawer

@@ -3,8 +3,7 @@ html {
 }
 
 body,
-#__next,
-.ant-layout {
+#__next {
     height: 100%
 }
 

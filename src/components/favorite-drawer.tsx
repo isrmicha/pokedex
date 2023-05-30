@@ -1,36 +1,37 @@
-import { HeartTwoTone } from "@ant-design/icons"
-import { Avatar, Drawer, List, Space, } from "antd"
 import { startCase } from "lodash"
-import Image from "next/image"
-import { record } from "zod"
 import { getPokemonImage } from "~/utils/image"
 import { trpc, } from "~/utils/trpc"
 import { Loading } from "./loading"
+import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemText, List, Drawer } from "@mui/material"
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavorite }: any) => {
     const { data: pokemons, } = trpc.pokemon.getPokemons.useQuery(
         { ids: favorites, }
     )
 
-    return <Drawer title="Favorites" placement="right" open={true} onClose={() => onClose(false)}>
-        <List
-            itemLayout="horizontal"
-            dataSource={pokemons?.items}
-            renderItem={({ id, name }) => (
-                <List.Item>
-                    <List.Item.Meta
-                        avatar={<Avatar shape="square" src={getPokemonImage(id)} />}
-                        title={startCase(name)}
-                        description={`#${id}`}
-                    />
+    return <Drawer
+        anchor="right"
+        open={true}
+        onClose={() => onClose(false)}
+    >
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            {pokemons?.items?.map(({ id, name }) => (
+                <ListItem key={id}>
+                    <ListItemAvatar>
+                        <Avatar shape="square" src={getPokemonImage(id)} />
+                    </ListItemAvatar>
+                    <ListItemText primary={startCase(name)} secondary={`#${id}`} />
                     <div>
                         {updateUser.isLoading ? <Loading /> :
-                            (<Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(`${id}`)}>
-                                <HeartTwoTone twoToneColor={"red"} />
-                            </Space>)}
+                            (
+                                <IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${id}`)} >
+                                    <FavoriteIcon />
+                                </IconButton>
+                            )}
                     </div>
-                </List.Item>
-            )}
-        />
+                </ListItem>
+            ))}
+        </List>
     </Drawer>
 }

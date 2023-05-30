@@ -1,20 +1,24 @@
-import React, { useState, } from 'react'
-import { Space, Tag, Table as _Table, } from 'antd'
-import type { ColumnsType, } from 'antd/es/table'
+import React, { useMemo, useState, } from 'react'
 import { PAGE_SIZE, TOTAL_POKEMON_COUNT, } from '~/constants'
-import {
-    HeartTwoTone,
-} from '@ant-design/icons'
 import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
 import { trpc, } from "~/utils/trpc"
 import Image from 'next/image'
+import { Chip, IconButton } from '@mui/material'
+import MaterialReactTable, { MRT_PaginationState } from 'material-react-table';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClickFavorite }) => {
-    const [page, setPage,] = useState<number>(0)
-
-    const { data: pokemons, isFetching, } = trpc.pokemon.getPokemons.useQuery({ offset: page * PAGE_SIZE, }, {
+    const [pagination, setPagination] = useState<MRT_PaginationState>({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+    const { data: pokemons, isFetching, } = trpc.pokemon.getPokemons.useQuery({
+        offset:
+            pagination.pageIndex * pagination.pageSize,
+        limit: pagination.pageSize,
+    }, {
         ...(favorites ? {
             select(data) {
                 data.items = data?.items.map((item) => {
@@ -27,64 +31,56 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
     })
     const isLoadingFavorites = isLoadingFavoritedIds || updateUser.isLoading
 
-    const handleChangePage = (page: number) => setPage(page - 1)
-    const handleOnErrorImage = (id, event, sprites) => {
-        event.target.src = getPokemonImage(id, true, sprites)
-    }
-    const columns: ColumnsType<DataType> = [
+    const columns = useMemo(() => [
         {
-            title: 'Id',
-            dataIndex: 'id',
-            key: 'id',
-            ellipsis: true,
-            render: (_, record) => <Tag>#{record?.id}</Tag>,
+            accessorKey: 'id', //access nested data with dot notation
+            header: 'ID',
+            key: "id",
+            Cell: ({ cell }) => {
+                return <Chip label={`#${cell.getValue?.()}`} />
+            },
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            ellipsis: true,
-            render: (text) => <Tag>
-                {startCase(text)}
-            </Tag>,
+            accessorKey: 'name',
+            header: 'Name',
+            key: "name",
+            Cell: ({ cell }) => {
+                return <Chip label={cell.getValue?.()} />
+            },
         },
         {
-            title: 'Image',
-            key: 'sprites',
-            dataIndex: 'sprites',
-            ellipsis: true,
-            render: (_, record) => (
-                <Image alt={record.name} src={getPokemonImage(record.id)} width={50} height={50}
-                    onError={event => handleOnErrorImage(record.id, event, record.sprites)}
-                />
-            ),
-        },
-        {
-            title: 'Favorite',
-            key: 'action',
-            dataIndex: 'action',
-            ellipsis: true,
-            render: (_, record) =>
-                isLoadingFavorites ? (<Loading />) : (
-                    <Space size="middle" style={{ cursor: 'pointer', }} onClick={() => handleClickFavorite(`${record?.id}`)}>
-                        <HeartTwoTone twoToneColor={record.isFavorite ? "red" : 'grey'} />
-                    </Space>
-                ),
-        },
-    ]
-    return <_Table
-        bordered
-        pagination={{
-            pageSize: PAGE_SIZE, current: page + 1,
-            onChange: handleChangePage,
-            total: TOTAL_POKEMON_COUNT,
-            showSizeChanger: false,
-        }}
-        loading={{ spinning: isFetching, indicator: <Loading />, }}
-        columns={columns} dataSource={pokemons?.items}
-        showHeader={false}
-        rowKey="id"
+            header: 'Image',
+            accessorKey: 'id_image',
+            key: "image",
 
+            Cell: ({ cell }) => {
+                const imageSrc = getPokemonImage(cell.row.original.id)
+                return <Image alt={imageSrc} src={imageSrc} width={50} height={50}
+                />
+            }
+
+        },
+        {
+            header: 'Favorite',
+            accessorKey: 'id_favorite',
+            key: "favorite",
+            Cell: ({ cell }) => {
+                return isLoadingFavorites ? (<Loading />) :
+                    (<IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${cell.row.original.id}`)}>
+                        <FavoriteIcon />
+                    </IconButton>)
+            },
+        }
+    ], [isLoadingFavorites])
+
+    return <MaterialReactTable columns={columns}
+        data={pokemons?.items ?? []}
+        enablePagination
+        manualPagination
+        onPaginationChange={setPagination}
+        state={{ isLoading: isFetching, pagination }}
+        muiTableBodyCellSkeletonProps={{ width: '100%', height: 55, active: true }}
+        rowCount={TOTAL_POKEMON_COUNT}
     />
 }
 
