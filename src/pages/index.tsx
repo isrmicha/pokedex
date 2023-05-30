@@ -13,7 +13,9 @@ import { AppBar, Avatar, Badge, Box, Button, Chip, IconButton, Toolbar } from "@
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Grid from "@mui/material/Unstable_Grid2"
 
+import Typography from '@mui/material/Typography';
 
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 const Home: NextPage = () => {
@@ -54,22 +56,26 @@ const Home: NextPage = () => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Pokedex
+            </Typography>
+
             {sessionData && (
 
               <>
 
                 <Avatar src={sessionData.user.image} alt="Rounded avatar" />
-                <Chip label={sessionData.user?.name} />
+                <Chip style={{ color: "white" }} label={sessionData.user?.name} />
                 <Badge badgeContent={favorites?.length} color="primary">
                   <IconButton aria-label="favorites" onClick={() => setIsOpenFavoriteDrawer(true)}>
-                    <FavoriteIcon />
+                    <FavoriteIcon style={{ color: "red" }} />
                   </IconButton>
                 </Badge>
               </>
 
             )}
             {status === 'loading' ? <Loading /> : (
-              <Button variant="outlined"
+              <Button variant="contained"
                 onClick={signOut}
               >Logout
               </Button>

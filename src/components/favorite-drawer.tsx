@@ -26,7 +26,7 @@ export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavo
                         {updateUser.isLoading ? <Loading /> :
                             (
                                 <IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${id}`)} >
-                                    <FavoriteIcon />
+                                    <FavoriteIcon style={{ color: "red" }} />
                                 </IconButton>
                             )}
                     </div>

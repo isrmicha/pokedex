@@ -67,7 +67,7 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
             Cell: ({ cell }) => {
                 return isLoadingFavorites ? (<Loading />) :
                     (<IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${cell.row.original.id}`)}>
-                        <FavoriteIcon />
+                        <FavoriteIcon style={{ color: cell.row.original.isFavorite ? "red" : "unset" }} />
                     </IconButton>)
             },
         }
