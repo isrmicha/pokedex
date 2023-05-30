@@ -1,5 +1,5 @@
 import React, { useMemo, useState, } from 'react'
-import { PAGE_SIZE, TOTAL_POKEMON_COUNT, } from '~/constants'
+import { PAGE_SIZE, TOTAL_POKEMON_COUNT, fallbackImage, } from '~/constants'
 import { getPokemonImage, } from '~/utils/image'
 import { startCase, } from 'lodash'
 import { Loading, } from './loading'
@@ -81,6 +81,9 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
         state={{ isLoading: isFetching && !pokemons?.items?.length, pagination }}
         muiTableBodyCellSkeletonProps={{ width: '100%', height: 55 }}
         rowCount={TOTAL_POKEMON_COUNT}
+        muiTableBodyCellProps={{
+            style: { "transition": "none" }
+        }}
     />
 }
 
