@@ -81,7 +81,13 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
         state={{ isLoading: isFetching && !pokemons?.items?.length, pagination }}
         muiTableBodyCellSkeletonProps={{ width: '100%', height: 55 }}
         rowCount={TOTAL_POKEMON_COUNT}
-        muiTableProps={{
+        muiTableBodyCellProps={{
+            style: { "transition": "none" }
+        }}
+        muiTableHeadCellProps={{
+            style: { "transition": "none" }
+        }}
+        muiTableFooterCellProps={{
             style: { "transition": "none" }
         }}
     />
