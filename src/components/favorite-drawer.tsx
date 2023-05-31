@@ -5,7 +5,7 @@ import { Loading } from "./loading"
 import { Avatar, IconButton, ListItem, ListItemAvatar, ListItemText, List, Drawer } from "@mui/material"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavorite }: any) => {
+export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavorite, isLogged }: any) => {
     const { data: pokemons, } = trpc.pokemon.getPokemons.useQuery(
         { ids: favorites, }
     )
@@ -25,7 +25,7 @@ export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavo
                     <div>
                         {updateUser.isLoading ? <Loading /> :
                             (
-                                <IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${id}`)} >
+                                <IconButton disabled={!isLogged} aria-label="favorites" onClick={() => handleClickFavorite(`${id}`)} >
                                     <FavoriteIcon style={{ color: "red" }} />
                                 </IconButton>
                             )}

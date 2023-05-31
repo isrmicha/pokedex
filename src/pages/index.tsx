@@ -11,19 +11,14 @@ import { trpc, } from "~/utils/trpc"
 import { ssgInit, } from "~/server/ssg-init"
 import { AppBar, Avatar, Badge, Box, Button, Chip, IconButton, Toolbar } from "@mui/material"
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Grid from "@mui/material/Unstable_Grid2"
-
 import Typography from '@mui/material/Typography';
 
-import MenuIcon from '@mui/icons-material/Menu';
-
 const Home: NextPage = () => {
-  const { data: sessionData, status, } = useSession()
-  // useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
+  const { data: sessionData, status, update } = useSession()
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-
   const updateUser = trpc.user.updateOne.useMutation()
   const { invalidate, } = trpc.useContext()
+
   const favorites = sessionData?.user?.favorites
   const handleClickFavorite = async (id: string) => {
     const newFavorites = !!favorites ? favorites?.includes(id) ? favorites?.filter(pokemonId => pokemonId !== id) : [...favorites, id,] : [id,]
@@ -33,6 +28,7 @@ const Home: NextPage = () => {
         where: { id: sessionData?.user?.id }
       }
     )
+    update()
     await invalidate()
   }
   const isLogged = status === 'authenticated'
@@ -86,6 +82,7 @@ const Home: NextPage = () => {
       {isOpenFavoriteDrawer && <FavoriteDrawer
         favorites={favorites}
         updateUser={updateUser}
+        isLogged={isLogged}
         handleClickFavorite={handleClickFavorite}
         onClose={() => setIsOpenFavoriteDrawer(false)}
       />}
