@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 
 import MenuIcon from '@mui/icons-material/Menu';
 
-
 const Home: NextPage = () => {
   const { data: sessionData, status, } = useSession()
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
