@@ -10,6 +10,7 @@ import { ssgInit, } from "~/server/ssg-init"
 import { AppBar, Avatar, Badge, Box, Button, Chip, IconButton, Toolbar } from "@mui/material"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Typography from '@mui/material/Typography';
+import { useState } from "react"
 
 const Home: NextPage = () => {
   const { data: sessionData, status, update } = useSession()
