@@ -9,7 +9,7 @@ import { Chip, IconButton } from '@mui/material'
 import MaterialReactTable, { MRT_PaginationState } from 'material-react-table';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClickFavorite }) => {
+export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClickFavorite, isLogged }) => {
     const [pagination, setPagination] = useState<MRT_PaginationState>({
         pageIndex: 0,
         pageSize: 10,
@@ -66,7 +66,7 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
             key: "favorite",
             Cell: ({ cell }) => {
                 return isLoadingFavorites ? (<Loading />) :
-                    (<IconButton aria-label="favorites" onClick={() => handleClickFavorite(`${cell.row.original.id}`)}>
+                    (<IconButton disabled={!isLogged} aria-label="favorites" onClick={() => handleClickFavorite(`${cell.row.original.id}`)}>
                         <FavoriteIcon style={{ color: cell.row.original.isFavorite ? "red" : "unset" }} />
                     </IconButton>)
             },

@@ -19,7 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const Home: NextPage = () => {
   const { data: sessionData, status, } = useSession()
-  useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
+  // useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
 
   const updateUser = trpc.user.updateOne.useMutation()
@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     )
     await invalidate()
   }
-
+  const isLogged = status === 'authenticated'
   return (
     <>
       <Head>
@@ -65,21 +65,19 @@ const Home: NextPage = () => {
             )}
             {status === 'loading' ? <Loading /> : (
               <Button variant="contained"
-                onClick={signOut}
-              >Logout
+                onClick={() => isLogged ? signOut() : signIn('google')}
+              >{isLogged ? 'Logout' : 'Login'}
               </Button>
             )}
           </Toolbar>
         </AppBar>
       </Box>
 
-
-
-
       <div className="site-layout-content">
         <Table
           isLoadingFavoritedIds={status === 'loading'}
           favorites={favorites}
+          isLogged={isLogged}
           updateUser={updateUser}
           handleClickFavorite={handleClickFavorite}
         />
