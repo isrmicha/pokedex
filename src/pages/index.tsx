@@ -3,8 +3,6 @@ import Head from "next/head"
 import { signIn, signOut, useSession, } from "next-auth/react"
 import { Table, } from "~/components/table"
 import { Loading, } from "~/components/loading"
-import { useEffect, useState, } from "react"
-import { useMedia, } from "react-use"
 import { FavoriteDrawer, } from "~/components/favorite-drawer"
 import { Analytics, } from '@vercel/analytics/react'
 import { trpc, } from "~/utils/trpc"
@@ -17,8 +15,6 @@ const Home: NextPage = () => {
   const { data: sessionData, status, update } = useSession()
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
   const updateUser = trpc.user.updateOne.useMutation()
-  const { invalidate, } = trpc.useContext()
-
   const favorites = sessionData?.user?.favorites
   const handleClickFavorite = async (id: string) => {
     const newFavorites = !!favorites ? favorites?.includes(id) ? favorites?.filter(pokemonId => pokemonId !== id) : [...favorites, id,] : [id,]
@@ -29,7 +25,6 @@ const Home: NextPage = () => {
       }
     )
     update()
-    await invalidate()
   }
   const isLogged = status === 'authenticated'
   return (
