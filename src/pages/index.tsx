@@ -20,20 +20,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 const Home: NextPage = () => {
   const { data: sessionData, status, } = useSession()
   useEffect(() => { if (status === 'unauthenticated') signIn('google') }, [status,])
-  const isMobile = useMedia('(max-width: 480px)', false)
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer,] = useState(false)
-  const { data: userData, isLoading: isLoadingFavoritedIds, } = trpc.user.findUnique
-    .useQuery({
-      where: {
-        id: sessionData?.user?.id,
-      },
-      select: {
-        favorites: true
-      }
-    }, { enabled: !!sessionData?.user.id, })
+
   const updateUser = trpc.user.updateOne.useMutation()
   const { invalidate, } = trpc.useContext()
-  const favorites = userData?.favorites
+  const favorites = sessionData?.user?.favorites
   const handleClickFavorite = async (id: string) => {
     const newFavorites = !!favorites ? favorites?.includes(id) ? favorites?.filter(pokemonId => pokemonId !== id) : [...favorites, id,] : [id,]
     await updateUser.mutateAsync(
@@ -86,8 +77,8 @@ const Home: NextPage = () => {
 
 
       <div className="site-layout-content">
-        <Table sessionData={sessionData}
-          isLoadingFavoritedIds={isLoadingFavoritedIds}
+        <Table
+          isLoadingFavoritedIds={status === 'loading'}
           favorites={favorites}
           updateUser={updateUser}
           handleClickFavorite={handleClickFavorite}

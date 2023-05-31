@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        favorites: user.favorites
       },
     }),
   },
@@ -50,7 +51,7 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-  
+
     /**
      * ...add more providers here.
      *
