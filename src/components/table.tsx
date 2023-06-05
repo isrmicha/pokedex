@@ -45,7 +45,7 @@ export const Table = ({ favorites, updateUser, isLoadingFavoritedIds, handleClic
             header: 'Name',
             key: "name",
             Cell: ({ cell }) => {
-                return <Chip label={cell.getValue?.()} />
+                return <Chip label={startCase(cell.getValue?.())} />
             },
         },
         {
