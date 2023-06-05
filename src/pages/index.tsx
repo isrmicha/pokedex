@@ -43,7 +43,6 @@ const Home: NextPage = () => {
             </Typography>
 
             {sessionData && (
-
               <>
                 <Avatar src={sessionData.user.image} alt="Rounded avatar" />
                 <Chip style={{ color: "white" }} label={sessionData.user?.name} />

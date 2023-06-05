@@ -19,7 +19,7 @@ export const FavoriteDrawer = ({ onClose, favorites, updateUser, handleClickFavo
             {pokemons?.items?.map(({ id, name }) => (
                 <ListItem key={id}>
                     <ListItemAvatar>
-                        <Avatar shape="square" src={getPokemonImage(id)} />
+                        <Avatar variant="square" src={getPokemonImage(id)} />
                     </ListItemAvatar>
                     <ListItemText primary={startCase(name)} secondary={`#${id}`} />
                     <div>
