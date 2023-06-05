@@ -22,6 +22,9 @@ dependencies:
   '@next-auth/prisma-adapter':
     specifier: ^1.0.6
     version: 1.0.6(@prisma/client@4.15.0)(next-auth@4.22.1)
+  '@preact/signals-react':
+    specifier: ^1.3.2
+    version: 1.3.2(react@18.2.0)
   '@prisma/client':
     specifier: ^4.15.0
     version: 4.15.0(prisma@4.15.0)
@@ -682,6 +685,20 @@ packages:
 
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+    dev: false
+
+  /@preact/signals-core@1.3.0:
+    resolution: {integrity: sha512-M+M3ZOtd1dtV/uasyk4SZu1vbfEJ4NeENv0F7F12nijZYedB5wSgbtZcuACyssnTznhF4ctUyrR0dZHuHfyWKA==}
+    dev: false
+
+  /@preact/signals-react@1.3.2(react@18.2.0):
+    resolution: {integrity: sha512-IjMUjjMMVI/hKa5jnS79rUmOAF4o+fUFjDrU/xHbE8a+Bv0n1svybWD/L31DRSMgGy5kyu5R77CWWaIg1pYy3Q==}
+    peerDependencies:
+      react: ^16.14.0 || 17.x || 18.x
+    dependencies:
+      '@preact/signals-core': 1.3.0
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /@prisma/client@4.15.0(prisma@4.15.0):
