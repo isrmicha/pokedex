@@ -14,6 +14,7 @@ import {
   Box,
   Button,
   Chip,
+  Grid,
   IconButton,
   Toolbar,
   useMediaQuery,
@@ -106,13 +107,17 @@ const Home: NextPage = () => {
       </Box>
 
       <div className="site-layout-content">
-        <Table
-          isLoadingFavoritedIds={status === "loading"}
-          favorites={favorites}
-          isLogged={isLogged}
-          updateUser={updateUser}
-          handleClickFavorite={handleClickFavorite}
-        />
+        <Grid container>
+          <Grid item xs={12}>
+            <Table
+              isLoadingFavoritedIds={status === "loading"}
+              favorites={favorites}
+              isLogged={isLogged}
+              updateUser={updateUser}
+              handleClickFavorite={handleClickFavorite}
+            />
+          </Grid>
+        </Grid>
       </div>
 
       {isOpenFavoriteDrawer && (
