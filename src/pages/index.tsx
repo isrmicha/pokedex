@@ -99,7 +99,7 @@ const Home: NextPage = () => {
                 sx={{ marginLeft: 2 }}
                 onClick={() => (isLogged ? signOut() : signIn("google"))}
               >
-                {isLogged ? "Logout" : "Login"}
+                {isLogged && !sessionData ? "Logout" : "Login"}
               </Button>
             )}
           </Toolbar>
