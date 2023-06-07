@@ -91,7 +91,7 @@ const Home: NextPage = () => {
                 </Badge>
               </>
             )}
-            {status === "loading" ? (
+            {status === "loading" && !sessionData ? (
               <Loading />
             ) : (
               <Button
