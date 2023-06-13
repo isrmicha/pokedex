@@ -17,7 +17,6 @@ import {
   Grid,
   IconButton,
   Toolbar,
-  useMediaQuery,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import Typography from "@mui/material/Typography";
@@ -25,13 +24,14 @@ import { useState } from "react";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import { theme, toggleTheme } from "~/signals";
+import LogoutIcon from '@mui/icons-material/Logout';
+import GoogleIcon from '@mui/icons-material/Google';
 
 const Home: NextPage = () => {
   const { data: sessionData, status, update } = useSession();
   const [isOpenFavoriteDrawer, setIsOpenFavoriteDrawer] = useState(false);
   const updateUser = trpc.user.updateOne.useMutation();
   const favorites = sessionData?.user?.favorites;
-  const isMobile = useMediaQuery("(max-width:480px)");
 
   const handleClickFavorite = async (id: string) => {
     const newFavorites = !!favorites
@@ -56,10 +56,25 @@ const Home: NextPage = () => {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Pokedex
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: 'flex' },
+                flexGrow: 1,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'white',
+                textDecoration: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              POKEDEX
             </Typography>
-
             {sessionData && (
               <>
                 <IconButton onClick={toggleTheme} sx={{ marginLeft: 2 }}>
@@ -70,13 +85,14 @@ const Home: NextPage = () => {
                   )}
                 </IconButton>
                 <Avatar src={sessionData.user.image} sx={{ marginLeft: 2 }} />
-                {!isMobile && (
-                  <Chip
-                    style={{ color: "white" }}
-                    label={sessionData.user?.name}
-                    sx={{ marginLeft: 2 }}
-                  />
-                )}
+                <Chip
+                  style={{ color: "white" }}
+                  label={sessionData.user?.name}
+                  sx={{
+                    marginLeft: 2,
+                    display: { xs: 'none', md: 'flex' },
+                  }}
+                />
                 <Badge
                   badgeContent={favorites?.length}
                   color="primary"
@@ -94,13 +110,22 @@ const Home: NextPage = () => {
             {status === "loading" && !sessionData ? (
               <Loading />
             ) : (
-              <Button
-                variant="contained"
-                sx={{ marginLeft: 2 }}
-                onClick={() => (isLogged ? signOut() : signIn("google"))}
-              >
-                {isLogged && sessionData ? "Logout" : "Login"}
-              </Button>
+              <>
+                <Button
+                  variant="contained"
+                  sx={{ marginLeft: 2, display: { xs: 'none', md: 'flex' } }}
+                  onClick={() => (isLogged ? signOut() : signIn("google"))}
+                >
+                  {isLogged && sessionData ? "Logout" : "Login"}
+                </Button>
+                <IconButton
+                  aria-label="favorites"
+                  onClick={() => (isLogged ? signOut() : signIn("google"))}
+                  sx={{ display: { xs: 'flex', md: 'none' }, ml: 1 }}
+                >
+                  {isLogged && sessionData ? <LogoutIcon /> : <GoogleIcon />}
+                </IconButton>
+              </>
             )}
           </Toolbar>
         </AppBar>
