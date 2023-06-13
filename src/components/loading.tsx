@@ -1,7 +1,7 @@
-import { Box, CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Skeleton } from '@mui/material'
 import React from 'react'
 
 export const Loading: React.FC = () => <Box sx={{ display: 'flex' }}>
-    <CircularProgress />
+    <Skeleton width={50} height={50} animation="wave" />
 </Box>
 
