@@ -1,6 +1,7 @@
-import { trpc } from "../../../src/utils/trpc";
+import { ssgInit } from "../../server/ssg-init";
 
 export default async function handler(req, res) {
-  const hasSession = await trpc.session.findMany();
-  res.status(200).end("Hello Cron! " + !!hasSession);
+  const helpers = await ssgInit();
+  const hasSession = await helpers.session.findFirst.fetch({});
+  res.status(200).json({ hasSession: !!hasSession });
 }
