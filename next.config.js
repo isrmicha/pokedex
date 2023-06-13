@@ -1,4 +1,4 @@
-const { i18n } = require('./next-i18next.config');
+const { i18n } = require("./next-i18next.config");
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -7,8 +7,8 @@ const config = {
   async redirects() {
     return [
       {
-        source: '/categories',
-        destination: '/',
+        source: "/categories",
+        destination: "/",
         permanent: false,
       },
     ];
@@ -19,15 +19,16 @@ const config = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: true
+    ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },
