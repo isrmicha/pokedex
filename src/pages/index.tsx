@@ -24,8 +24,8 @@ import { useState } from "react";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import { theme, toggleTheme } from "~/signals";
-import LogoutIcon from '@mui/icons-material/Logout';
-import GoogleIcon from '@mui/icons-material/Google';
+import LogoutIcon from "@mui/icons-material/Logout";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const Home: NextPage = () => {
   const { data: sessionData, status, update } = useSession();
@@ -63,14 +63,14 @@ const Home: NextPage = () => {
               href=""
               sx={{
                 mr: 2,
-                display: { xs: 'flex' },
+                display: { xs: "flex" },
                 flexGrow: 1,
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'white',
-                textDecoration: 'none',
-                cursor: 'pointer'
+                letterSpacing: ".3rem",
+                color: "white",
+                textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               POKEDEX
@@ -90,7 +90,7 @@ const Home: NextPage = () => {
                   label={sessionData.user?.name}
                   sx={{
                     marginLeft: 2,
-                    display: { xs: 'none', md: 'flex' },
+                    display: { xs: "none", md: "flex" },
                   }}
                 />
                 <Badge
@@ -113,7 +113,7 @@ const Home: NextPage = () => {
               <>
                 <Button
                   variant="contained"
-                  sx={{ marginLeft: 2, display: { xs: 'none', md: 'flex' } }}
+                  sx={{ marginLeft: 2, display: { xs: "none", md: "flex" } }}
                   onClick={() => (isLogged ? signOut() : signIn("google"))}
                 >
                   {isLogged && sessionData ? "Logout" : "Login"}
@@ -121,7 +121,7 @@ const Home: NextPage = () => {
                 <IconButton
                   aria-label="favorites"
                   onClick={() => (isLogged ? signOut() : signIn("google"))}
-                  sx={{ display: { xs: 'flex', md: 'none' }, ml: 1 }}
+                  sx={{ display: { xs: "flex", md: "none" }, ml: 1 }}
                 >
                   {isLogged && sessionData ? <LogoutIcon /> : <GoogleIcon />}
                 </IconButton>
@@ -144,7 +144,6 @@ const Home: NextPage = () => {
           </Grid>
         </Grid>
       </div>
-
       {isOpenFavoriteDrawer && (
         <FavoriteDrawer
           favorites={favorites}
