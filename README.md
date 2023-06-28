@@ -1,1 +1,1 @@
-![image](https://github.com/isrmicha/pokedex/assets/8812005/a75c5e4b-b1a9-4d79-8fe8-5001f6552ee9)
+![image](https://github.com/isrmicha/pokedex/assets/8812005/b2ca54a0-2001-444b-84d3-d1e1af0c92fd)
