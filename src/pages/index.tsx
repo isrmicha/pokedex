@@ -3,7 +3,6 @@ import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Table } from "~/components/table";
 import { Loading } from "~/components/loading";
-import { FavoriteDrawer } from "~/components/favorite-drawer";
 import { Analytics } from "@vercel/analytics/react";
 import { trpc } from "~/utils/trpc";
 import { ssgInit } from "~/server/ssg-init";
@@ -26,6 +25,9 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import { theme, toggleTheme } from "~/signals";
 import LogoutIcon from "@mui/icons-material/Logout";
 import GoogleIcon from "@mui/icons-material/Google";
+import dynamic from "next/dynamic";
+
+const FavoriteDrawer = dynamic(() => import("~/components/favorite-drawer"));
 
 const Home: NextPage = () => {
   const { data: sessionData, status, update } = useSession();
@@ -60,7 +62,7 @@ const Home: NextPage = () => {
               variant="h5"
               noWrap
               component="a"
-              href=""
+              href="https://pokedex-isrmicha.vercel.app"
               sx={{
                 mr: 2,
                 display: { xs: "flex" },
@@ -77,14 +79,22 @@ const Home: NextPage = () => {
             </Typography>
             {sessionData && (
               <>
-                <IconButton onClick={toggleTheme} sx={{ marginLeft: 2 }}>
+                <IconButton
+                  onClick={toggleTheme}
+                  sx={{ marginLeft: 2 }}
+                  aria-label="theme"
+                >
                   {theme.value === "dark" ? (
                     <Brightness4Icon />
                   ) : (
                     <NightsStayIcon sx={{ color: "white" }} />
                   )}
                 </IconButton>
-                <Avatar src={sessionData.user.image} sx={{ marginLeft: 2 }} />
+                <Avatar
+                  src={`${sessionData.user.image}`}
+                  sx={{ marginLeft: 2 }}
+                  alt={`${sessionData.user.image}`}
+                />
                 <Chip
                   style={{ color: "white" }}
                   label={sessionData.user?.name}
@@ -97,12 +107,16 @@ const Home: NextPage = () => {
                   badgeContent={favorites?.length}
                   color="primary"
                   sx={{ marginLeft: 2 }}
+                  aria-label="favorites"
                 >
                   <IconButton
                     aria-label="favorites"
                     onClick={() => setIsOpenFavoriteDrawer(true)}
                   >
-                    <FavoriteIcon style={{ color: "red" }} />
+                    <FavoriteIcon
+                      style={{ color: "red" }}
+                      aria-label="favorites"
+                    />
                   </IconButton>
                 </Badge>
               </>
@@ -113,6 +127,7 @@ const Home: NextPage = () => {
               <>
                 <Button
                   variant="contained"
+                  aria-label={isLogged && sessionData ? "Logout" : "Login"}
                   sx={{ marginLeft: 2, display: { xs: "none", md: "flex" } }}
                   onClick={() => (isLogged ? signOut() : signIn("google"))}
                 >

@@ -63,9 +63,20 @@ export const Table = ({
         header: "Image",
         accessorKey: "id_image",
         key: "image",
+
         Cell: ({ cell }) => {
           const imageSrc = getPokemonImage(cell.row.original.id);
-          return <Image alt={imageSrc} src={imageSrc} width={50} height={50} />;
+          return (
+            <div style={{ position: "relative", height: 50, width: 50 }}>
+              <Image
+                alt={imageSrc}
+                src={imageSrc}
+                fill
+                sizes="100vw"
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          );
         },
       },
       {
