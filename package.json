@@ -41,7 +41,7 @@
     "i18next": "^22.4.15",
     "lodash": "^4.17.21",
     "material-react-table": "^1.11.5",
-    "next": "^13.4.2",
+    "next": "^13.4.8",
     "next-auth": "^4.22.1",
     "next-i18next": "^13.2.2",
     "react": "^18.2.0",
