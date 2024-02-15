@@ -2,8 +2,6 @@
 
 import { startCase } from "lodash";
 import { getPokemonImage } from "~/utils/image";
-import { trpc } from "~/utils/trpc";
-import { Loading } from "./loading";
 import {
   Avatar,
   IconButton,
@@ -17,7 +15,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { api } from "~/trpc/react";
 import { useQueryParams } from "~/hooks/useQueryParams";
 import { updateUserFavorite } from "~/app/actions";
-import { useSession } from "next-auth/react";
 
 const FavoriteDrawer = ({ session }) => {
   const favorites = session?.user?.favorites

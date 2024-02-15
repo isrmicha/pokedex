@@ -7,7 +7,6 @@ import {
   Chip,
   CircularProgress,
   Grid,
-  Skeleton,
   Toolbar,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -18,10 +17,8 @@ import { TableWrapper } from "~/components/table-wrapper";
 import { UserHeader } from "~/components/UserHeader";
 
 
-export default async function Home({
-  params,
-  searchParams: { isFavoriteOpen: isFavoriteOpenRaw, pageSize = 10, pageIndex = 0 } }) {
-
+export default async function Home(props) {
+  const { searchParams: { isFavoriteOpen: isFavoriteOpenRaw, pageSize = 10, pageIndex = 0 } } = props
   const session = await getServerAuthSession();
   const isFavoriteOpen = isFavoriteOpenRaw === 'true'
 

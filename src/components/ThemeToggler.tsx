@@ -1,4 +1,5 @@
 'use client'
+
 import { IconButton } from "@mui/material"
 import { useQueryParams } from "~/hooks/useQueryParams"
 import Brightness4Icon from "@mui/icons-material/Brightness4";

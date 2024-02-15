@@ -1,5 +1,6 @@
 'use client'
-import React, { useState } from "react";
+
+import React from "react";
 import { getPokemonImage } from "~/utils/image";
 import { startCase } from "lodash";
 import Image from "next/image";
