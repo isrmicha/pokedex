@@ -52,8 +52,8 @@ export const Table = ({ pokemons, session }) => {
               alt={imageSrc}
               src={imageSrc}
               fill
-              sizes="100vw"
-              style={{ objectFit: "cover" }}
+              sizes="199vw"
+              style={{ objectFit: "contain" }}
             />
           </div>
         );
