@@ -1,24 +1,25 @@
 'use client'
 import { Badge, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import Link from "next/link";
+import { useQueryParams } from "~/hooks/useQueryParams";
 
-export function Favorite({ isFavoriteOpen, favorites }: { isFavoriteOpen: boolean, favorites: number[] }) {
-    return (<Badge badgeContent={favorites?.length} color="primary" sx={{
-        marginLeft: 2
-    }} aria-label="favorites">
-        <Link
-            href={{
-                query: {
-                    isFavoriteOpen: !isFavoriteOpen
-                },
-            }}
+export function Favorite({ favoritesCount }: { isFavoriteOpen: boolean, favoritesCount: number }) {
+    const { getParam, setParam } = useQueryParams()
+    const isFavoriteOpen = getParam("isFavoriteOpen") === 'true'
+    return (<Badge
+        badgeContent={favoritesCount}
+        color="primary"
+        sx={{ marginLeft: 2 }}
+        aria-label="favorites"
+    >
+        <IconButton
+            aria-label="favorites"
+            onClick={() => setParam('isFavoriteOpen', `${!isFavoriteOpen}`)}
         >
-            <IconButton aria-label="favorites">
-                <FavoriteIcon style={{
-                    color: "red"
-                }} aria-label="favorites" />
-            </IconButton>
-        </Link>
-    </Badge >);
+            <FavoriteIcon
+                style={{ color: "red" }}
+                aria-label="favorites"
+            />
+        </IconButton>
+    </Badge>);
 }

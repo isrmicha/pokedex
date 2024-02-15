@@ -7,10 +7,19 @@ import { Chip, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
 import { TOTAL_POKEMON_COUNT } from "~/constants";
-import { useRouter } from "next/navigation";
+import { useQueryParams } from "~/hooks/useQueryParams";
+import { updateUserFavorite } from "~/app/actions";
 
 
-export const Table = ({ pokemons, limit, offset }) => {
+
+export const Table = ({ pokemons, session }) => {
+  const { getParam, setParams } = useQueryParams()
+  const pageIndex = Number(getParam("pageIndex") ?? "0")
+  const pageSize = Number(getParam("pageSize") ?? "10")
+
+  const handleClickFavorite = async (id: string) => {
+    await updateUserFavorite(id)
+  }
 
   const columns = [
     {
@@ -55,7 +64,7 @@ export const Table = ({ pokemons, limit, offset }) => {
       key: "favorite",
       Cell: ({ cell }) => {
         return <IconButton
-          // disabled={!isLogged}
+          disabled={!session}
           aria-label="favorites"
           onClick={() => handleClickFavorite(`${cell.row.original.id}`)}
         >
@@ -69,33 +78,21 @@ export const Table = ({ pokemons, limit, offset }) => {
     }
   ]
 
-
-  // const [pagination, setPagination] = useState<MRT_PaginationState>({
-  //   pageIndex: 0,
-  //   pageSize: 10,
-  // });
-
-  // const [pagination, setPagination] = useState({
-  //   pageIndex: 0,
-  //   pageSize: 5, //customize the default page size
-  // });
-  const router = useRouter()
   const setPagination = pagination => {
-    router.push({ query: pagination(old => old) })
+    setParams(pagination({ pageIndex, pageSize }))
   }
-  // console.log(pagination)
 
   const tableProps = useMaterialReactTable({
     columns,
-    data: pokemons?.items || [],
+    data: pokemons || [],
     onPaginationChange: setPagination,
     rowCount: TOTAL_POKEMON_COUNT,
     enablePagination: true,
     manualPagination: true,
     state: {
       pagination: {
-        pageIndex: offset,
-        pageSize: limit
+        pageIndex,
+        pageSize
       }
     }
   });
