@@ -1,21 +1,12 @@
-const { i18n } = require("./next-i18next.config");
+/**
+ * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
+ * for Docker builds.
+ */
+await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
 const config = {
-  // i18n,
-
-  async redirects() {
-    return [
-      {
-        source: "/categories",
-        destination: "/",
-        permanent: false,
-      },
-    ];
-  },
-
-  /** We run eslint as a separate task in CI */
-  eslint: {
+      eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
@@ -31,7 +22,10 @@ const config = {
         pathname: "/**",
       },
     ],
+  }, 
+  experimental: {
+    ppr: true,
   },
 };
 
-module.exports = config;
+export default config;

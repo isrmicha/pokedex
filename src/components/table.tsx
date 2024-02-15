@@ -1,129 +1,102 @@
-import React, { useMemo, useState } from "react";
-import { PAGE_SIZE, TOTAL_POKEMON_COUNT, fallbackImage } from "~/constants";
+'use client'
+
+import React from "react";
 import { getPokemonImage } from "~/utils/image";
 import { startCase } from "lodash";
-import { Loading } from "./loading";
-import { trpc } from "~/utils/trpc";
 import Image from "next/image";
 import { Chip, IconButton } from "@mui/material";
-import MaterialReactTable, { MRT_PaginationState } from "material-react-table";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
+import { TOTAL_POKEMON_COUNT } from "~/constants";
+import { useQueryParams } from "~/hooks/useQueryParams";
+import { updateUserFavorite } from "~/app/actions";
 
-export const Table = ({
-  favorites,
-  updateUser,
-  isLoadingFavoritedIds,
-  handleClickFavorite,
-  isLogged,
-}) => {
-  const [pagination, setPagination] = useState<MRT_PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
-  const { data: pokemons, isFetching } = trpc.pokemon.getPokemons.useQuery(
+
+
+export const Table = ({ pokemons, session }) => {
+  const { getParam, setParams } = useQueryParams()
+  const pageIndex = Number(getParam("pageIndex") ?? "0")
+  const pageSize = Number(getParam("pageSize") ?? "10")
+
+  const handleClickFavorite = async (id: string) => {
+    await updateUserFavorite(id)
+  }
+
+  const columns = [
     {
-      offset: pagination.pageIndex * pagination.pageSize,
-      limit: pagination.pageSize,
+      accessorKey: "id", //access nested data with dot notation
+      header: "ID",
+      key: "id",
+      Cell: ({ cell }) => {
+        return <Chip label={`#${cell.getValue?.()}`} />;
+      },
     },
     {
-      ...(favorites
-        ? {
-            select(data) {
-              data.items = data?.items.map((item) => {
-                item.isFavorite = favorites?.includes(`${item.id}`);
-                return item;
-              });
-              return data;
-            },
-          }
-        : {}),
+      accessorKey: "name",
+      header: "Name",
+      key: "name",
+      Cell: ({ cell }) => {
+        return <Chip label={startCase(cell.getValue?.())} />;
+      },
+    },
+    {
+      header: "Image",
+      accessorKey: "id_image",
+      key: "image",
+
+      Cell: ({ cell }) => {
+        const imageSrc = getPokemonImage(cell.row.original.id);
+        return (
+          <div style={{ position: "relative", height: 50, width: 50 }}>
+            <Image
+              alt={imageSrc}
+              src={imageSrc}
+              fill
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
+            />
+          </div>
+        );
+      },
+    },
+    {
+      header: "Favorite",
+      accessorKey: "id_favorite",
+      key: "favorite",
+      Cell: ({ cell }) => {
+        return <IconButton
+          disabled={!session}
+          aria-label="favorites"
+          onClick={() => handleClickFavorite(`${cell.row.original.id}`)}
+        >
+          <FavoriteIcon
+            style={{
+              color: cell.row.original.isFavorite ? "red" : "unset",
+            }}
+          />
+        </IconButton>
+      }
     }
-  );
-  const isLoadingFavorites = isLoadingFavoritedIds || updateUser.isLoading;
+  ]
 
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "id", //access nested data with dot notation
-        header: "ID",
-        key: "id",
-        Cell: ({ cell }) => {
-          return <Chip label={`#${cell.getValue?.()}`} />;
-        },
-      },
-      {
-        accessorKey: "name",
-        header: "Name",
-        key: "name",
-        Cell: ({ cell }) => {
-          return <Chip label={startCase(cell.getValue?.())} />;
-        },
-      },
-      {
-        header: "Image",
-        accessorKey: "id_image",
-        key: "image",
+  const setPagination = pagination => {
+    setParams(pagination({ pageIndex, pageSize }))
+  }
 
-        Cell: ({ cell }) => {
-          const imageSrc = getPokemonImage(cell.row.original.id);
-          return (
-            <div style={{ position: "relative", height: 50, width: 50 }}>
-              <Image
-                alt={imageSrc}
-                src={imageSrc}
-                fill
-                sizes="100vw"
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-          );
-        },
-      },
-      {
-        header: "Favorite",
-        accessorKey: "id_favorite",
-        key: "favorite",
-        Cell: ({ cell }) => {
-          return isLoadingFavorites ? (
-            <Loading />
-          ) : (
-            <IconButton
-              disabled={!isLogged}
-              aria-label="favorites"
-              onClick={() => handleClickFavorite(`${cell.row.original.id}`)}
-            >
-              <FavoriteIcon
-                style={{
-                  color: cell.row.original.isFavorite ? "red" : "unset",
-                }}
-              />
-            </IconButton>
-          );
-        },
-      },
-    ],
-    [isLoadingFavorites]
-  );
-
-  return (
-    <MaterialReactTable
-      columns={columns}
-      data={pokemons?.items ?? []}
-      enablePagination
-      manualPagination
-      onPaginationChange={setPagination}
-      state={{ isLoading: isFetching && !pokemons?.items?.length, pagination }}
-      muiTableBodyCellSkeletonProps={{ width: "100%", height: 55 }}
-      rowCount={TOTAL_POKEMON_COUNT}
-      muiTableBodyCellProps={{
-        style: { transition: "none" },
-      }}
-      muiTableHeadCellProps={{
-        style: { transition: "none" },
-      }}
-      muiTableFooterCellProps={{
-        style: { transition: "none" },
-      }}
-    />
-  );
+  const tableProps = useMaterialReactTable({
+    columns,
+    data: pokemons || [],
+    onPaginationChange: setPagination,
+    rowCount: TOTAL_POKEMON_COUNT,
+    enablePagination: true,
+    manualPagination: true,
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize
+      }
+    }
+  });
+  return <MaterialReactTable table={tableProps} />;
 };
+
