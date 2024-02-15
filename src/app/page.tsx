@@ -18,9 +18,8 @@ import { UserHeader } from "~/components/UserHeader";
 
 
 export default async function Home(props) {
-  const { searchParams: { isFavoriteOpen: isFavoriteOpenRaw, pageSize = 10, pageIndex = 0 } } = props
+  const { searchParams: { pageSize = 10, pageIndex = 0 } } = props
   const session = await getServerAuthSession();
-  const isFavoriteOpen = isFavoriteOpenRaw === 'true'
 
 
   return (
@@ -64,7 +63,7 @@ export default async function Home(props) {
                       display: { xs: "none", md: "flex" },
                     }}
                   />
-                  <Favorite isFavoriteOpen={isFavoriteOpen} favoritesCount={session?.user?.favorites?.length}></Favorite>
+                  <Favorite session={session} ></Favorite>
                 </>
               )}
               <UserHeader session={session} />
@@ -85,9 +84,7 @@ export default async function Home(props) {
             </Grid>
           </Grid>
         </div>
-        {isFavoriteOpen && (
-          <FavoriteDrawer session={session} />
-        )}
+
         <Analytics />
       </>
     </main>

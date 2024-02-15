@@ -1,25 +1,33 @@
 'use client'
 import { Badge, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useQueryParams } from "~/hooks/useQueryParams";
+import FavoriteDrawer from "./favorite-drawer";
+import { useState } from "react";
 
-export function Favorite({ favoritesCount }: { isFavoriteOpen: boolean, favoritesCount: number }) {
-    const { getParam, setParam } = useQueryParams()
-    const isFavoriteOpen = getParam("isFavoriteOpen") === 'true'
-    return (<Badge
-        badgeContent={favoritesCount}
-        color="primary"
-        sx={{ marginLeft: 2 }}
-        aria-label="favorites"
-    >
-        <IconButton
-            aria-label="favorites"
-            onClick={() => setParam('isFavoriteOpen', `${!isFavoriteOpen}`)}
-        >
-            <FavoriteIcon
-                style={{ color: "red" }}
+export function Favorite({ session }: { isFavoriteOpen: boolean }) {
+    const [isFavoriteOpen, setIsFavoriteOpen] = useState(false)
+    const favoritesCount = session?.user?.favorites?.length
+    return (
+        <>
+            <Badge
+                badgeContent={favoritesCount}
+                color="primary"
+                sx={{ marginLeft: 2 }}
                 aria-label="favorites"
-            />
-        </IconButton>
-    </Badge>);
+            >
+                <IconButton
+                    aria-label="favorites"
+                    onClick={() => setIsFavoriteOpen(!isFavoriteOpen)}
+                >
+                    <FavoriteIcon
+                        style={{ color: "red" }}
+                        aria-label="favorites"
+                    />
+                </IconButton>
+            </Badge>
+            {isFavoriteOpen && (
+                <FavoriteDrawer session={session} setIsFavoriteOpen={setIsFavoriteOpen} isFavoriteOpen={isFavoriteOpen} />
+            )}
+        </>
+    );
 }

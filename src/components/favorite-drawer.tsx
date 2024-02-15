@@ -16,7 +16,7 @@ import { api } from "~/trpc/react";
 import { useQueryParams } from "~/hooks/useQueryParams";
 import { updateUserFavorite } from "~/app/actions";
 
-const FavoriteDrawer = ({ session }) => {
+const FavoriteDrawer = ({ session, isFavoriteOpen, setIsFavoriteOpen }) => {
   const favorites = session?.user?.favorites
   const { data: pokemons } = api.pokemonRouter.getPokemons.useQuery({
     ids: favorites,
@@ -27,7 +27,7 @@ const FavoriteDrawer = ({ session }) => {
     await updateUserFavorite(id)
   }
   return (
-    <Drawer anchor="right" open={true} onClose={() => setParam('isFavoriteOpen', false)}>
+    <Drawer anchor="right" open={true} onClose={() => setIsFavoriteOpen(!isFavoriteOpen)}>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
         {pokemons?.items?.map(({ id, name }) => (
           <ListItem key={id}>
