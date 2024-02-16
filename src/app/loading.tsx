@@ -1,5 +1,9 @@
-import { Skeleton } from "@mui/material";
+import { Box, CircularProgress, Skeleton } from "@mui/material";
 
-export default function Loading() {
-    return <Skeleton variant="rectangular" width={210} height={118} />
+export default function Loading({ full }: { full?: boolean}) {
+    return full ?
+        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', padding: 50 }}>
+            <CircularProgress />
+        </Box>
+        : <Skeleton />
 }

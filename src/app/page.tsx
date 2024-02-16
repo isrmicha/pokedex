@@ -1,26 +1,18 @@
-import { getServerAuthSession } from "~/server/auth";
 import { Analytics } from "@vercel/analytics/react";
 import {
   AppBar,
-  Avatar,
   Box,
-  Chip,
-  CircularProgress,
   Grid,
   Toolbar,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import FavoriteDrawer from "~/components/favorite-drawer";
 import { Suspense } from "react";
-import { Favorite } from "../components/Favorite";
 import { TableWrapper } from "~/components/table-wrapper";
-import { UserHeader } from "~/components/UserHeader";
+import { HeaderItems } from "~/components/HeaderItems";
+import Loading from "./loading";
 
-
-export default async function Home(props) {
+export default async function Home(props: { searchParams: { pageSize: number, pageIndex: number } }) {
   const { searchParams: { pageSize = 10, pageIndex = 0 } } = props
-  const session = await getServerAuthSession();
-
 
   return (
     <main>
@@ -47,27 +39,9 @@ export default async function Home(props) {
               >
                 POKEDEX
               </Typography>
-              {session && (
-                <>
-
-                  <Avatar
-                    src={`${session.user.image}`}
-                    sx={{ marginLeft: 2 }}
-                    alt={`${session.user.image}`}
-                  />
-                  <Chip
-                    style={{ color: "white" }}
-                    label={session.user?.name}
-                    sx={{
-                      marginLeft: 2,
-                      display: { xs: "none", md: "flex" },
-                    }}
-                  />
-                  <Favorite session={session} ></Favorite>
-                </>
-              )}
-              <UserHeader session={session} />
-
+                <Suspense fallback={<Loading />}>
+                  <HeaderItems />
+                </Suspense>
             </Toolbar>
           </AppBar>
         </Box>
@@ -75,17 +49,14 @@ export default async function Home(props) {
         <div className="site-layout-content">
           <Grid container>
             <Grid item xs={12}>
-
-              <Suspense fallback={<Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', padding: 50 }}>
-                <CircularProgress />
-              </Box>}>
-                <TableWrapper pageSize={pageSize} pageIndex={pageIndex} session={session} />
+              <Suspense fallback={<Loading full/>}>
+                <TableWrapper pageSize={pageSize} pageIndex={pageIndex} />
               </Suspense>
             </Grid>
           </Grid>
         </div>
 
-        <Analytics />
+        <Analytics mode="auto"/>
       </>
     </main>
   );

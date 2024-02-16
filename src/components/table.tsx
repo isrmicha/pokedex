@@ -54,6 +54,7 @@ export const Table = ({ pokemons, session }) => {
               fill
               sizes="199vw"
               style={{ objectFit: "contain" }}
+              
             />
           </div>
         );

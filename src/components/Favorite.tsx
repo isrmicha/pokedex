@@ -4,7 +4,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteDrawer from "./favorite-drawer";
 import { useState } from "react";
 
-export function Favorite({ session }: { isFavoriteOpen: boolean }) {
+export function Favorite({ session }) {
     const [isFavoriteOpen, setIsFavoriteOpen] = useState(false)
     const favoritesCount = session?.user?.favorites?.length
     return (

@@ -11,7 +11,15 @@ import { getUrl, transformer } from "./shared";
 export const api = createTRPCReact<AppRouter>();
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+      }
+    }
+  }));
 
   const [trpcClient] = useState(() =>
     api.createClient({

@@ -3,12 +3,10 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  type Session,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 
-import { env } from "~/env";
 import { db } from "~/server/db";
 
 /**
@@ -71,4 +69,4 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = () => getServerSession(authOptions) 
