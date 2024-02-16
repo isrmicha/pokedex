@@ -1,16 +1,12 @@
 import "~/styles/globals.css";
 
-import { Inter } from "next/font/google";
 import { ThemeProvider } from '@mui/material/styles';
 import { TRPCReactProvider } from "~/trpc/react";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { darkTheme } from "~/theme";
 
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+
 
 export const metadata = {
   title: "Pokedex",
@@ -25,16 +21,16 @@ export default function RootLayout(props: {
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
-        <TRPCReactProvider>
-          <AppRouterCacheProvider 
-           options={{ key: 'css' }}
-          >
-            <ThemeProvider theme={darkTheme}>
+      <body >
+        <AppRouterCacheProvider
+          options={{ key: 'css' }}
+        >
+          <ThemeProvider theme={darkTheme}>
+            <TRPCReactProvider>
               {props.children}
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </TRPCReactProvider>
+            </TRPCReactProvider>
+          </ThemeProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
