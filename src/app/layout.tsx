@@ -27,7 +27,9 @@ export default function RootLayout(props: {
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <AppRouterCacheProvider>
+          <AppRouterCacheProvider 
+           options={{ key: 'css' }}
+          >
             <ThemeProvider theme={darkTheme}>
               {props.children}
             </ThemeProvider>
