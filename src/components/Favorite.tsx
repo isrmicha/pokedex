@@ -1,8 +1,10 @@
 'use client'
 import { Badge, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteDrawer from "./favorite-drawer";
 import { useState } from "react";
+import dynamic from 'next/dynamic'
+
+const FavoriteDrawer = dynamic(() => import('./favorite-drawer'))
 
 export function Favorite({ session }) {
     const [isFavoriteOpen, setIsFavoriteOpen] = useState(false)
