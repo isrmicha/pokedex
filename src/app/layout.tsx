@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { TRPCReactProvider } from "~/trpc/react";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { darkTheme } from "~/theme";
+import NextAuthProvider from "./contet/NextAuthProvider";
 
 
 
@@ -27,7 +28,9 @@ export default function RootLayout(props: {
         >
           <ThemeProvider theme={darkTheme}>
             <TRPCReactProvider>
-              {props.children}
+              <NextAuthProvider>
+                {props.children}
+              </NextAuthProvider>
             </TRPCReactProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

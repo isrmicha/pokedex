@@ -2,7 +2,6 @@
 
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server"
-import { revalidateTag } from 'next/cache'
 
 
 export async function updateUserFavorite(id: string) {
@@ -18,5 +17,4 @@ export async function updateUserFavorite(id: string) {
     data: { favorites: newFavorites },
     where: { id: session?.user.id },
   })
-  revalidateTag()
 }

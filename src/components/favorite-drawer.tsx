@@ -15,7 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { api } from "~/trpc/react";
 import { updateUserFavorite } from "~/app/actions";
 
-const FavoriteDrawer = ({ session, isFavoriteOpen, setIsFavoriteOpen }) => {
+const FavoriteDrawer = ({ session, isFavoriteOpen, setIsFavoriteOpen, update }) => {
   const favorites = session?.user?.favorites
   const { data: pokemons } = api.pokemonRouter.getPokemons.useQuery({
     ids: favorites,
@@ -23,6 +23,7 @@ const FavoriteDrawer = ({ session, isFavoriteOpen, setIsFavoriteOpen }) => {
 
   const handleClickFavorite = async (id: string) => {
     await updateUserFavorite(id)
+    await update()
   }
   return (
     <Drawer anchor="right" open={true} onClose={() => setIsFavoriteOpen(!isFavoriteOpen)}>

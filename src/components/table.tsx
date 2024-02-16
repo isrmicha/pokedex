@@ -10,16 +10,24 @@ import { useMaterialReactTable, MaterialReactTable } from "material-react-table"
 import { TOTAL_POKEMON_COUNT } from "~/constants";
 import { useQueryParams } from "~/hooks/useQueryParams";
 import { updateUserFavorite } from "~/app/actions";
+import { useSession } from "next-auth/react";
 
 
 
-export const Table = ({ pokemons, session }) => {
+export const Table = ({ pokemons }) => {
+  const {data: session, update} = useSession()
+  const favorites = session?.user.favorites
+    const pokemonsWithIsFavorite = pokemons?.items.map((item) => {
+    item.isFavorite = favorites?.includes(`${item.id}`);
+    return item;
+  });
   const { getParam, setParams } = useQueryParams()
   const pageIndex = Number(getParam("pageIndex") ?? "0")
   const pageSize = Number(getParam("pageSize") ?? "10")
 
   const handleClickFavorite = async (id: string) => {
     await updateUserFavorite(id)
+    await update()
   }
 
   const columns = [
@@ -86,7 +94,7 @@ export const Table = ({ pokemons, session }) => {
 
   const tableProps = useMaterialReactTable({
     columns,
-    data: pokemons || [],
+    data: pokemonsWithIsFavorite || [],
     onPaginationChange: setPagination,
     rowCount: TOTAL_POKEMON_COUNT,
     enablePagination: true,

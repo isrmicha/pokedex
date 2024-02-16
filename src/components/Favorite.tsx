@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 
 const FavoriteDrawer = dynamic(() => import('./favorite-drawer'))
 
-export function Favorite({ session }) {
+export function Favorite({ session, update }) {
     const [isFavoriteOpen, setIsFavoriteOpen] = useState(false)
     const favoritesCount = session?.user?.favorites?.length
     return (
@@ -28,7 +28,7 @@ export function Favorite({ session }) {
                 </IconButton>
             </Badge>
             {isFavoriteOpen && (
-                <FavoriteDrawer session={session} setIsFavoriteOpen={setIsFavoriteOpen} isFavoriteOpen={isFavoriteOpen} />
+                <FavoriteDrawer session={session} setIsFavoriteOpen={setIsFavoriteOpen} isFavoriteOpen={isFavoriteOpen} update={update} />
             )}
         </>
     );
