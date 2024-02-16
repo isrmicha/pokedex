@@ -1,9 +1,9 @@
-import { Box, CircularProgress } from "@mui/material";
 
 export default function Loading({ full }: { full?: boolean}) {
-    return full ?
-        <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', padding: 50 }}>
-            <CircularProgress />
-        </Box>
-        : <CircularProgress />
+    return null
+    // return full ?
+    //     <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', padding: 50 }}>
+    //         <CircularProgress />
+    //     </Box>
+    //     : <CircularProgress />
 }
