@@ -6,30 +6,21 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { darkTheme } from "~/theme";
 import NextAuthProvider from "./contet/NextAuthProvider";
 
-
-
-
 export const metadata = {
   title: "Pokedex",
   description: "Created by isrmicha",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-
-
-export default function RootLayout(props: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
       <body >
-        <AppRouterCacheProvider
-          options={{ key: 'css' }}
-        >
+        <AppRouterCacheProvider>
           <ThemeProvider theme={darkTheme}>
             <TRPCReactProvider>
               <NextAuthProvider>
-                {props.children}
+                {children}
               </NextAuthProvider>
             </TRPCReactProvider>
           </ThemeProvider>

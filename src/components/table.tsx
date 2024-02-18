@@ -13,9 +13,12 @@ import { updateUserFavorite } from "~/app/actions";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 
-export const Table = ({ pageSize, pageIndex, initialData }) => {
+export const Table = ({ pageSize, pageIndex }: {
+  pageSize: number,
+  pageIndex: number,
+}) => {
   
-  const { data: pokemons, isLoading } = api.pokemonRouter.getPokemons.useQuery({ limit: Number(pageSize), offset: Number(pageIndex * pageSize) }, {initialData})
+  const { data: pokemons, isLoading } = api.pokemonRouter.getPokemons.useQuery({ limit: Number(pageSize), offset: Number(pageIndex * pageSize) })
   const { data: session, update } = useSession()
   const favorites = session?.user.favorites
   const pokemonsWithIsFavorite = pokemons?.items.map((item) => {
@@ -23,7 +26,6 @@ export const Table = ({ pageSize, pageIndex, initialData }) => {
     return item;
   });
   const { setParams } = useQueryParams()
-
 
   const handleClickFavorite = async (id: string) => {
     await updateUserFavorite(id)

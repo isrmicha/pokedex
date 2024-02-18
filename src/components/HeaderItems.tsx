@@ -9,7 +9,7 @@ export const HeaderItems = async () => {
     const {data: session, update} = useSession()
     return (
         <>
-            {session && (
+            {session?.user?.name && (
                 <>
                     <Avatar
                         src={`${session?.user.image}`}

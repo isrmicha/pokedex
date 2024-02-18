@@ -14,6 +14,7 @@ import { appRouter } from "~/server/api/root";
 import { Table } from "~/components/table";
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
+import { Hydrate,dehydrate  } from '@tanstack/react-query';
 
 export default async function Home(props: { searchParams: { pageSize: number, pageIndex: number } }) {
   const { searchParams } = props
@@ -25,8 +26,8 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
   transformer: superjson, // optional - adds superjson serialization
 });
 
-  const initialData = await helpers.pokemonRouter.getPokemons.fetch({ limit: 10, offset: 0 })
-  
+  await helpers.pokemonRouter.getPokemons.prefetch({ limit: 10, offset: 0 })
+  const dehydratedState = dehydrate(helpers.queryClient);
   return (
     <main>
       <>
@@ -63,7 +64,9 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
           <Grid container>
             <Grid item xs={12}>
               <Suspense fallback={<Loading full/>}>
-                <Table pageSize={pageSize} pageIndex={pageIndex}  initialData={initialData} />
+                <Hydrate state={dehydratedState}>
+                <Table pageSize={pageSize} pageIndex={pageIndex} />
+                </Hydrate>
               </Suspense>
             </Grid>
           </Grid>
