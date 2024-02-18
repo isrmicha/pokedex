@@ -11,19 +11,19 @@ import { TOTAL_POKEMON_COUNT } from "~/constants";
 import { useQueryParams } from "~/hooks/useQueryParams";
 import { updateUserFavorite } from "~/app/actions";
 import { useSession } from "next-auth/react";
+import { api } from "~/trpc/react";
 
-
-
-export const Table = ({ pokemons }) => {
-  const {data: session, update} = useSession()
+export const Table = ({ pageSize, pageIndex, initialData }) => {
+  
+  const { data: pokemons, isLoading } = api.pokemonRouter.getPokemons.useQuery({ limit: Number(pageSize), offset: Number(pageIndex * pageSize) }, {initialData})
+  const { data: session, update } = useSession()
   const favorites = session?.user.favorites
-    const pokemonsWithIsFavorite = pokemons?.items.map((item) => {
+  const pokemonsWithIsFavorite = pokemons?.items.map((item) => {
     item.isFavorite = favorites?.includes(`${item.id}`);
     return item;
   });
-  const { getParam, setParams } = useQueryParams()
-  const pageIndex = Number(getParam("pageIndex") ?? "0")
-  const pageSize = Number(getParam("pageSize") ?? "10")
+  const { setParams } = useQueryParams()
+
 
   const handleClickFavorite = async (id: string) => {
     await updateUserFavorite(id)
@@ -62,7 +62,7 @@ export const Table = ({ pokemons }) => {
               fill
               sizes="199vw"
               style={{ objectFit: "contain" }}
-              
+
             />
           </div>
         );
@@ -100,6 +100,7 @@ export const Table = ({ pokemons }) => {
     enablePagination: true,
     manualPagination: true,
     state: {
+      isLoading,
       pagination: {
         pageIndex,
         pageSize

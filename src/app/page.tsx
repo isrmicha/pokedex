@@ -7,13 +7,26 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Suspense } from "react";
-import { TableWrapper } from "~/components/table-wrapper";
 import { HeaderItems } from "~/components/HeaderItems";
 import Loading from "./loading";
+import { createContext } from "~/trpc/server";
+import { appRouter } from "~/server/api/root";
+import { Table } from "~/components/table";
+import { createServerSideHelpers } from '@trpc/react-query/server';
+import superjson from 'superjson';
 
 export default async function Home(props: { searchParams: { pageSize: number, pageIndex: number } }) {
-  const { searchParams: { pageSize = 10, pageIndex = 0 } } = props
+  const { searchParams } = props
+  const pageSize = Number(searchParams.pageSize) || 10
+  const pageIndex = Number(searchParams.pageIndex) || 0
+  const helpers = createServerSideHelpers({
+  router: appRouter,
+  ctx: await createContext(),
+  transformer: superjson, // optional - adds superjson serialization
+});
 
+  const initialData = await helpers.pokemonRouter.getPokemons.fetch({ limit: 10, offset: 0 })
+  
   return (
     <main>
       <>
@@ -50,7 +63,7 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
           <Grid container>
             <Grid item xs={12}>
               <Suspense fallback={<Loading full/>}>
-                <TableWrapper pageSize={pageSize} pageIndex={pageIndex} />
+                <Table pageSize={pageSize} pageIndex={pageIndex}  initialData={initialData} />
               </Suspense>
             </Grid>
           </Grid>
