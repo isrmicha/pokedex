@@ -4,7 +4,7 @@ import React from "react";
 import { getPokemonImage } from "~/utils/image";
 import { startCase } from "lodash";
 import Image from "next/image";
-import { Chip, IconButton } from "@mui/material";
+import { Box, Chip, IconButton, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useMaterialReactTable, MaterialReactTable } from "material-react-table";
 import { TOTAL_POKEMON_COUNT } from "~/constants";
@@ -17,7 +17,7 @@ export const Table = ({ pageSize, pageIndex }: {
   pageSize: number,
   pageIndex: number,
 }) => {
-  
+
   const { data: pokemons, isLoading } = api.pokemonRouter.getPokemons.useQuery({ limit: Number(pageSize), offset: Number(pageIndex * pageSize) })
   const { data: session, update } = useSession()
   const favorites = session?.user.favorites
@@ -101,13 +101,38 @@ export const Table = ({ pageSize, pageIndex }: {
     rowCount: TOTAL_POKEMON_COUNT,
     enablePagination: true,
     manualPagination: true,
+    paginationDisplayMode: 'pages',
+    muiPaginationProps: {
+      color: 'secondary',
+      rowsPerPageOptions: [10, 20, 30, 40, 50],
+      shape: 'rounded',
+      variant: 'outlined',
+    },
     state: {
       isLoading,
       pagination: {
         pageIndex,
         pageSize
       }
-    }
+    },
+    renderDetailPanel: ({ row }) => (
+      <Box
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          width: '100%',
+        }}
+      >
+        {row.original.stats.map((stat) => (
+          <Box key={stat.statName.name}>
+            <Typography >
+              <Chip size="small" label={`${startCase(stat.statName.name)}: ${stat.base_stat}`} />
+
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    ),
   });
   return <MaterialReactTable table={tableProps} />;
 };
