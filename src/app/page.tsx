@@ -6,9 +6,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { Suspense } from "react";
 import { HeaderItems } from "~/components/HeaderItems";
-import Loading from "./loading";
 import { createContext } from "~/trpc/server";
 import { appRouter } from "~/server/api/root";
 import { Table } from "~/components/table";
@@ -53,9 +51,7 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
               >
                 POKEDEX
               </Typography>
-                <Suspense fallback={<Loading />}>
                   <HeaderItems />
-                </Suspense>
             </Toolbar>
           </AppBar>
         </Box>
@@ -63,11 +59,9 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
         <div className="site-layout-content">
           <Grid container>
             <Grid item xs={12}>
-              <Suspense fallback={<Loading full/>}>
                 <Hydrate state={dehydratedState}>
-                <Table pageSize={pageSize} pageIndex={pageIndex} />
+                  <Table pageSize={pageSize} pageIndex={pageIndex} />
                 </Hydrate>
-              </Suspense>
             </Grid>
           </Grid>
         </div>
