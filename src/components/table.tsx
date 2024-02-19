@@ -121,6 +121,7 @@ export const Table = ({ pageSize, pageIndex }: {
           alignItems: 'center',
           display: 'flex',
           width: '100%',
+          justifyContent: 'space-around',
         }}
       >
         {row.original.stats.map((stat) => (
