@@ -24,7 +24,7 @@ const config = {
     ],
   }, 
   experimental: {
-    ppr: true,
+    // ppr: true,
   },
 };
 
