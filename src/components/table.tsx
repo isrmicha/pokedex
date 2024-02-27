@@ -13,13 +13,13 @@ import { updateUserFavorite } from "~/app/actions";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 
-const Table = ({ pageSize, pageIndex }: {
+export const Table = ({ pageSize, pageIndex }: {
   pageSize: number,
   pageIndex: number,
 }) => {
 
   const { data: pokemons, isLoading } = api.pokemonRouter.getPokemons.useQuery({ limit: Number(pageSize), offset: Number(pageIndex * pageSize) })
-  const { data: session, update,  } = useSession()
+  const { data: session, update } = useSession()
   const favorites = session?.user.favorites
   const pokemonsWithIsFavorite = pokemons?.items.map((item) => {
     item.isFavorite = favorites?.includes(`${item.id}`);
@@ -28,9 +28,8 @@ const Table = ({ pageSize, pageIndex }: {
   const { setParams } = useQueryParams()
 
   const handleClickFavorite = async (id: string) => {
-    updateUserFavorite(id).then(() => {
-       update()
-    })
+    await updateUserFavorite(id)
+    await update()
   }
 
   const columns = [
@@ -116,9 +115,6 @@ const Table = ({ pageSize, pageIndex }: {
         pageSize
       }
     },
-     muiSkeletonProps: {
-      height: 50
-     },
     renderDetailPanel: ({ row }) => (
       <Box
         sx={{
@@ -142,4 +138,3 @@ const Table = ({ pageSize, pageIndex }: {
   return <MaterialReactTable table={tableProps} />;
 };
 
-export default Table

@@ -21,10 +21,9 @@ const FavoriteDrawer = ({ session, isFavoriteOpen, setIsFavoriteOpen, update }) 
     ids: favorites,
   });
 
-  const handleClickFavorite =  (id: string) => {
-    updateUserFavorite(id).then(() => {
-       update()
-    })
+  const handleClickFavorite = async (id: string) => {
+    await updateUserFavorite(id)
+    await update()
   }
   return (
     <Drawer anchor="right" open={true} onClose={() => setIsFavoriteOpen(!isFavoriteOpen)}>

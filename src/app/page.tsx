@@ -9,23 +9,20 @@ import Typography from "@mui/material/Typography";
 import { HeaderItems } from "~/components/HeaderItems";
 import { createContext } from "~/trpc/server";
 import { appRouter } from "~/server/api/root";
+import { Table } from "~/components/table";
 import { createServerSideHelpers } from '@trpc/react-query/server';
 import superjson from 'superjson';
-import { Hydrate, dehydrate } from '@tanstack/react-query';
-import { Suspense } from "react";
-import dynamic from 'next/dynamic'
-
-const Table = dynamic(() => import('~/components/table'))
+import { Hydrate,dehydrate  } from '@tanstack/react-query';
 
 export default async function Home(props: { searchParams: { pageSize: number, pageIndex: number } }) {
   const { searchParams } = props
   const pageSize = Number(searchParams.pageSize) || 10
   const pageIndex = Number(searchParams.pageIndex) || 0
   const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: await createContext(),
-    transformer: superjson, // optional - adds superjson serialization
-  });
+  router: appRouter,
+  ctx: await createContext(),
+  transformer: superjson, // optional - adds superjson serialization
+});
 
   await helpers.pokemonRouter.getPokemons.prefetch({ limit: 10, offset: 0 })
   const dehydratedState = dehydrate(helpers.queryClient);
@@ -54,9 +51,7 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
               >
                 POKEDEX
               </Typography>
-              <Suspense fallback={null}>
-                <HeaderItems />
-              </Suspense>
+                  <HeaderItems />
             </Toolbar>
           </AppBar>
         </Box>
@@ -64,16 +59,14 @@ export default async function Home(props: { searchParams: { pageSize: number, pa
         <div className="site-layout-content">
           <Grid container>
             <Grid item xs={12}>
-              <Hydrate state={dehydratedState}>
-                <Suspense fallback={null}>
+                <Hydrate state={dehydratedState}>
                   <Table pageSize={pageSize} pageIndex={pageIndex} />
-                  </Suspense>
-              </Hydrate>
+                </Hydrate>
             </Grid>
           </Grid>
         </div>
 
-        <Analytics mode="auto" />
+        <Analytics mode="auto"/>
       </>
     </main>
   );
