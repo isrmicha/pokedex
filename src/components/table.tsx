@@ -27,7 +27,7 @@ const Table = ({ pageSize, pageIndex }: {
   });
   const { setParams } = useQueryParams()
 
-  const handleClickFavorite = async (id: string) => {
+  const handleClickFavorite = (id: string) => {
     updateUserFavorite(id).then(() => {
        update()
     })
